@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:background="@drawable/column_window_background"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp">
+
+    <TextView
+        android:id="@+id/nameTV"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Column name..."
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginTop="5dp" />
+
+    <com.jldroid.twook.view.ActionBarBtn android:id="@+id/refreshBtn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:src="@drawable/actionbar_refresh" android:layout_marginRight="5dp" android:layout_marginTop="5dp"/>
+    <ProgressBar android:id="@+id/refreshPB" android:layout_width="32dp" android:layout_height="32dp" android:layout_alignParentRight="true" android:layout_marginTop="5dp" android:layout_marginRight="5dp"/>
+    
+    <com.jldroid.twook.view.ColumnView android:id="@+id/columnView" android:layout_below="@id/nameTV" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_margin="5dp"/>
+    
+</RelativeLayout>

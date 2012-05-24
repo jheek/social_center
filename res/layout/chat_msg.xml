@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <View
+        android:id="@+id/profileIV"
+        android:layout_width="48dp"
+        android:layout_height="48dp" 
+        android:background="@drawable/no_profileimg_img"/>
+
+    <TextView
+        android:id="@+id/timeTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="12sp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"
+        android:text="16:00" />
+    
+     <TextView
+        android:id="@+id/senderTV"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="15sp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_toRightOf="@id/profileIV"
+        android:layout_toLeftOf="@id/timeTV"
+        android:text="Title"
+        android:textStyle="bold" />
+    
+    <TextView
+        android:id="@+id/contentTV"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="14sp"
+        android:layout_toRightOf="@id/profileIV"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@id/senderTV"
+        android:text="content" />
+    
+
+</RelativeLayout>

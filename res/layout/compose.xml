@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent">
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical">
+	    
+	    <com.jldroid.twook.view.AccountTabsView android:id="@+id/accountTabs" android:layout_width="fill_parent" android:layout_height="wrap_content"/>
+	    
+	    <AutoCompleteTextView
+	        android:id="@+id/updateText"
+	        android:layout_width="fill_parent"
+	        android:layout_margin="5dp"
+	        android:layout_height="90dp"
+	        android:inputType="textMultiLine"
+	        android:gravity="top"
+	     android:background="@drawable/edit_text_holo_light"
+	     android:textColor="#000000"
+	        android:hint="What's happening?">
+	    </AutoCompleteTextView>
+	
+	    <LinearLayout
+	        android:id="@+id/attachmentHolder"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:layout_margin="5dp" />
+	</LinearLayout>
+</ScrollView>

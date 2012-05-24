@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <ListPreference android:persistent="false" android:entryValues="@array/account_sync_interval_values" android:entries="@array/account_sync_intervals" android:title="Update interval" android:dialogTitle="Update interval" android:summary="How many times this column should update" android:key="syncInterval"/><PreferenceCategory android:title="Notification">
+        <CheckBoxPreference android:key="notificationEnabled" android:persistent="false" android:title="Notifications" android:defaultValue="true" android:summary="When enabled a notification will be shown in the status bar when new updates are available."/>
+	    <CheckBoxPreference android:key="notificationSound" android:title="Sound" android:summary="Play a ringtone when notification is shown" android:defaultValue="true" android:dependency="notificationEnabled" android:persistent="false"/>
+	    <RingtonePreference android:summary="The ringtone to use for the notification" android:key="notificationRingtone" android:title="Ringtone" android:persistent="false"/>
+	    <CheckBoxPreference android:key="notificationVibrate" android:title="Vibrate" android:summary="When enabled your phone/tablet will vibrate when the notificaiton is shown" android:dependency="notificationEnabled" android:persistent="false" android:defaultValue="true"/>
+	    <CheckBoxPreference android:key="notificationLED" android:title="LED" android:summary="When enabled your LED will flash when the notificaiton is shown" android:dependency="notificationEnabled" android:persistent="false" android:defaultValue="true"/>
+    </PreferenceCategory>
+    
+</PreferenceScreen>

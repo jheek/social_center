@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Spinner.Light" parent="@android:style/Widget.Spinner">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:background">@drawable/button_selector</item>
+    </style>
+
+    <style name="Spinner.Dark" parent="@android:style/Widget.Spinner">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:background">@drawable/button_selector</item>
+    </style>
+
+    <style name="Button.Light" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/btn_default_holo_light</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMediumInverse</item>
+        <item name="android:textColor">@color/primary_text_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+    </style>
+
+    <style name="Button.Dark" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/btn_default_holo_light</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMediumInverse</item>
+        <item name="android:textColor">@color/primary_text_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+    </style>
+
+    <style name="ListView.Light" parent="@android:style/Widget.ListView">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:listSelector">@drawable/list_selector</item>
+        <item name="android:dividerHeight">1px</item>
+        <item name="android:cacheColorHint">#FFF</item>
+        <item name="android:divider">#BBBBBB</item>
+    </style>
+
+    <style name="ListView.Dark" parent="@android:style/Widget.ListView">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:listSelector">@drawable/list_selector</item>
+        <item name="android:dividerHeight">1px</item>
+        <item name="android:cacheColorHint">#000</item>
+        <item name="android:divider">#BBBBBB</item>
+    </style>
+
+    <style name="EditText.Light" parent="@android:style/Widget.EditText">
+        <item name="android:background">@drawable/edit_text_holo_light</item>
+        <item name="android:textAppearance">@attr/textAppearanceMediumInverse</item>
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="EditText.Dark" parent="@android:style/Widget.EditText">
+        <item name="android:background">@drawable/edit_text_holo_light</item>
+        <item name="android:textAppearance">@attr/textAppearanceMediumInverse</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="MessageView"></style>
+
+    <style name="MessageView.Light">
+        <item name="messageTitleColor">#000000</item>
+        <item name="messageBodyColor">#000000</item>
+        <item name="messageTimeColor">#888888</item>
+        <item name="messageInfoColor">#888888</item>
+    </style>
+
+    <style name="MessageView.Dark">
+        <item name="messageTitleColor">#FFF</item>
+        <item name="messageBodyColor">#BEBEBE</item>
+        <item name="messageTimeColor">#888888</item>
+        <item name="messageInfoColor">#888888</item>
+    </style>
+
+    <style name="ViewPagerTabs"></style>
+
+    <style name="ViewPagerTabs.Light">
+        <item name="backgroundColorPressed">#884695CE</item>
+        <item name="textColor">#999999</item>
+        <item name="textColorCenter">#FFFFFF</item>
+        <item name="lineColorCenter">#33B5E5</item>
+        <item name="lineHeight">0dip</item>
+    </style>
+
+    <style name="ViewPagerTabs.Dark">
+        <item name="backgroundColorPressed">#884695CE</item>
+        <item name="textColor">#999999</item>
+        <item name="textColorCenter">#FFFFFF</item>
+        <item name="lineColorCenter">#33B5E5</item>
+        <item name="lineHeight">0dip</item>
+    </style>
+
+    <style name="DetailsView"></style>
+
+    <style name="DetailsView.Light">
+        <item name="likesBackground">@drawable/light_blue</item>
+        <item name="likesTextColor">#000</item>
+        <item name="commentsBackground">@drawable/light_blue</item>
+    </style>
+
+    <style name="DetailsView.Dark">
+        <item name="likesBackground">@null</item>
+        <item name="likesTextColor">#FFF</item>
+        <item name="commentsBackground">@null</item>
+    </style>
+
+    <style name="ActionBar" />
+    <style name="ActionBar.Light" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="background">@drawable/ab_background2</item>
+        <item name="android:background">@drawable/ab_background2</item>
+        <item name="absForceOverflow">true</item>
+    </style>
+    <style name="ActionBar.Dark" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="background">@drawable/ab_background2</item>
+        <item name="android:background">@drawable/ab_background2</item>
+        <item name="absForceOverflow">true</item>
+    </style>
+
+    <style name="Animations" />
+
+    <!-- PopDownMenu -->
+    <style name="Animations.PopDownMenu" />
+
+    <style name="Animations.PopDownMenu.Left">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Right">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Center">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_top</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_bottom</item>
+    </style>
+
+    <!-- PopUpMenu -->
+    <style name="Animations.PopUpMenu" />
+
+    <style name="Animations.PopUpMenu.Left">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Right">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Center">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>
+        <item name="@android:windowExitAnimation">@anim/shrink_from_top</item>
+    </style>
+
+</resources>

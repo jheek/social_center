@@ -1,0 +1,64 @@
+
+
+email: tester_ekphnea_tester@tfbnw.net w8woord: Welkom123
+
+
+--- beta release ---
+
+
+
+layout,
+buttons updaten (naar officiele ics buttons) 
+welcome.xml updaten
+
+
+
+
+
+
+
+--- bugs -- 
+
+als compose plaatjes nog niet ingeladen zijn en je gaat eruit fc
+wachtwoord verkeerd getypt wordt niet afgehandeld
+
+
+--- functionaliteit ---
+
+
+bugs
+
+major
+
+
+-zoekfunctie
+- conversatie's van twitter laten zien. net als comments van fb zichtbaar zijn.
+
+
+minor
+
+
+
+
+--- layout ---
+
+
+
+
+
+- View profile
+
+ maken
+- message.xml opschonen
+- notification center 
+- icons: camera icon updaten, privacy icon updaten, icon voor toevoegen contactpersoon, icon voor notification center, 
+
+
+
+minor
+- facebook en twitter icon voor xhdpi maken
+- launcher icon 512 bij 512
+- viewpager indicator hoger
+- viewpager indicator balk weg 
+- viewpager indicator - laten zien wanneer ongelezen berichten
+- write comment - updaten.

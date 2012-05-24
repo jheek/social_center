@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="app_name">Social Center</string>
+    
+    <!-- global -->
+    <string name="pb_title_loading">Loading</string>
+    <string name="pb_msg_please_wait">Please wait a moment.</string>
+    <string name="unexpected_error">An unexpected error occurred.</string>
+    <string name="error_check_network">Error please check your network connection.</string>
+    <string name="failed_update">Failed to update.</string>
+    
+    <string name="summation">, </string>
+    <string name="summation_last"> and </string>
+    <string name="summation_other">1 other</string>
+    <string name="summation_others">%d others</string>
+    
+    <string name="msg_too_long">Cannot send message longer than %d characters</string>
+    
+    <string name="refresh">Refresh</string>
+    
+    <string name="friends">Friends</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    
+    <string name="choose_an_option">Choose one of the options.</string>
+    
+    <!-- chat -->
+    <string name="chat_notification_title">New messages</string>
+    <string name="chat_notification_msg_single">new message from %s</string>
+    <string name="chat_notification_msg_multi">%1$d new messages from %2$s</string>
+    <string name="msg_cant_send_empty">You can\'t send a empty message.</string>
+    <string name="msg_sending">Sending message</string>
+    <string name="failed_send_msg">Failed to send message.</string>
+    
+    <!-- chats -->
+    <string name="chats">Chats</string>
+    
+    <!-- add facebook -->
+    <string name="loading_fb_auth">Loading facebook authantication please wait a moment.</string>
+    <string name="error_cannot_add_fb">Error cannot add facebook account.</string>
+    <string name="adding_fb_dialog_title">Adding Facebook account</string>
+    
+    <!-- add twitter -->
+    <string name="add_twitter_dialog_title">Adding Twitter account</string>
+    <string name="failed_add_twitter">Failed to add twitter account</string>
+    
+    <!-- compose -->
+    <string name="update_cannot_be_empty">Update cannot be empty!</string>
+    <string name="compose">Compose</string>
+    <string name="add_attachment">Add attachment</string>
+    <string name="post">Post</string>
+    
+    <!-- album -->
+    <string name="failed_load_comments_likes">Failed to load photo comments and likes</string>
+    <string name="failed_load_photos">Error cannot add facebook account.</string>
+    <string name="adding_fb_dialog_title">Adding Facebook account</string>
+    
+    <!-- details  -->
+    <string name="details">Details</string>
+    <string name="failed_load_details">Failed to load details.</string>
+    <string name="like">Like</string>
+    <string name="likes">Likes</string>
+    <string name="share">Share</string>
+    <string name="reply">Reply</string>
+    <string name="retweet">Retweet</string>
+    <string name="comment">Comment</string>
+    <string name="favorite">Favorite</string>
+    
+    <!-- donation -->
+    <string name="donation_100">1 euro donation</string>
+    <string name="donation_250">2.50 euro donation</string>
+    <string name="donation_500">5 euro donation</string>
+    <string name="donation_1000">10 euro donation</string>
+    
+    <!-- main -->
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
+    <string name="setup">Setup</string>
+    <string name="donate">Donate</string>
+    
+    <!-- people -->
+    <string name="people">People</string>
+    
+    <!-- search -->
+    <string name="tab_messages">MESSAGES</string>
+    <string name="tab_people">PEOPLE</string>
+    <string name="search_hint">Search</string>
+    
+    <!-- setup -->
+    <string name="setup_welcome">Welcome to</string>
+    <string name="setup_next">Next</string>
+    <string name="setup_finish">Finish</string>
+    <string name="setup_prev">Previous</string>
+    
+    <!-- view profile -->
+    <string name="tab_info">INFO</string>
+    <string name="tab_updates">UPDATES</string>
+    <string name="tab_pictures">PICTURES</string>
+    <string name="tab_timeline">TIMELINE</string>
+    <string name="unfollowed">Unfollowed %s</string>
+    <string name="followed">You\'re now following %s</string>
+    <string name="follow_requested">A follow request has been send to %s</string>
+    <string name="failed_unfollow">Failed to unfollow %s</string>
+    <string name="failed_follow">Failed to follow %s</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="send_friend_request">Send friendrequest</string>
+    <string name="unfriend">Unfriend</string>
+    <string name="failed_load_info">Failed to load info</string>
+    <string name="info_about">About %s</string>
+    <string name="info_basic">Basic information</string>
+    <string name="info_other">Other information</string>
+    <string name="info_contact">Contact</string>
+    
+    <!-- setup accounts -->
+    <string name="add_at_least_one_account">Add at least one account</string>
+    <string name="add_twitter">Add Twitter</string>
+    <string name="add_facebook">Add Facebook</string>
+    
+    <!-- setup column mode -->
+    <string name="split">Split</string>
+    <string name="merged">Merged</string>
+    
+    <!-- columns -->
+    <string name="empty_name">Empty</string>
+    <string name="empty_description">Just an empty list</string>
+    <string name="home_name">News feed</string>
+    <string name="home_description">Home feed and timeline updates from all your accounts</string>
+    <string name="aboutme_name">About me</string>
+    <string name="aboutme_description">Notifications and mentions from all your account</string>
+    <string name="messages_name">Messages</string>
+    <string name="messages_description">Direct messages from Twitter and messages from Facebook</string>
+    <string name="search_name">Search - %s</string>
+    <string name="search_description">Search for messages</string>
+    <string name="fb_newsfeed_name">%s - News feed</string>
+    <string name="fb_newsfeed_description">All updates from your friends and pages you like</string>
+    <string name="fb_notifications_name">%s - Notifications</string>
+    <string name="fb_notifications_description">An notification is always something personal or importante</string>
+    <string name="fb_messages_name">%s - Messages</string>
+    <string name="fb_messages_description">Private messages from other facebook users to you</string>
+    <string name="fb_group_name">%s</string>
+    <string name="fb_group_description">Updates from this group</string>
+    <string name="fb_list_name">%s</string>
+    <string name="fb_list_description">Updates from this list</string>
+    <string name="fb_search_name">Search - %s</string>
+    <string name="fb_search_description">Search for facebook messages</string>
+    <string name="fb_user_name">%s</string>
+    <string name="fb_user_description">All updates from %s</string>
+    <string name="twitter_timeline_name">%s - Timeline</string>
+    <string name="twitter_timeline_description">All updates from the twitter accounts you follow</string>
+    <string name="twitter_mentions_name">%s - Mentions</string>
+    <string name="twitter_mentions_description">All updates in which this account is mentioned and replies to tweets from this account</string>
+    <string name="twitter_direct_msgs_name">%s - Direct messages</string>
+    <string name="twitter_direct_msgs_description">All direct messages to this account</string>
+    <string name="twitter_list_name">%s</string>
+    <string name="twitter_list_description">Tweets from this list</string>
+    <string name="twitter_search_name">Search - %s</string>
+    <string name="twitter_search_description">Search for twitter messages</string>
+    <string name="twitter_user_name">%s</string>
+    <string name="twitter_user_description">All tweets from %s</string>
+    
+    <!-- unread notification -->
+    <string name="notification_unread_title">New %s updates</string>
+    <string name="notification_unread_msg">%1$d unread %2$s updates</string>
+    
+    <!-- spans -->
+    <string name="failed_load_user_info">Failed to load user info.</string>
+    
+    <!-- user -->
+    <string name="user_language">Language: </string>
+    <string name="user_followers">Followers: </string>
+    <string name="user_following">Following: </string>
+    <string name="user_status_count">Status count: </string>
+    <string name="user_description">Description: </string>
+    <string name="user_profile_page">Profile page: </string>
+    <string name="user_religion">Religion: </string>
+    <string name="user_birthday">Birthday: </string>
+    <string name="user_sex">Sex: </string>
+    <string name="user_relation_status">Relation status: </string>
+    <string name="user_friends">Friends: </string>
+    <string name="user_mutual_friends">Mutual friends: </string>
+    <string name="user_quotes">Quotes: </string>
+    <string name="user_about_me">About me: </string>
+    <string name="user_website">Website: </string>
+    <string name="user_email">Email: </string>
+    <string name="user_hometown">Home town: </string>
+    <string name="user_general_info">General info: </string>
+    <string name="user_fan_count">Fan count: </string>
+    <string name="user_phone">Phone: </string>
+    
+    <!-- message -->
+    <string name="msg_to">%1$s > %2$s</string>
+    
+    <!-- columns -->
+    <string name="columns">Columns</string>
+    <string name="combined">Combined</string>
+    
+    <!-- configurate widget -->
+    <string name="higher_api_lvl_needed">You need a newer version of Android to add this widget</string>
+    
+    <!-- main activity -->
+    <string name="updates">Updates</string>
+    <string name="compose">Compose</string>
+    <string name="people">People</string>
+    <string name="chat">Chat</string>
+    
+    <!-- settings -->
+    <string name="settings">Settings</string>
+    
+    
+    <string-array name="account_sync_intervals">
+        <item>Default</item>
+        <item>Never</item>
+        <item>5 minutes</item>
+        <item>10 minutes</item>
+       	<item>15 minutes</item>
+       	<item>30 minutes</item>
+       	<item>1 hour</item>
+       	<item>2 hours</item>
+       	<item>4 hours</item>
+       	<item>8 hours</item>
+       	<item>12 hours</item>
+       	<item>1 day</item>
+    </string-array>
+    <string-array name="account_sync_interval_values">
+        <item>-2</item>
+        <item>-1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>240</item>
+        <item>480</item>
+        <item>720</item>
+        <item>1440</item>
+    </string-array>
+    
+    <string-array name="default_sync_intervals">
+        <item>Never</item>
+        <item>5 minutes</item>
+        <item>10 minutes</item>
+       	<item>15 minutes</item>
+       	<item>30 minutes</item>
+       	<item>1 hour</item>
+       	<item>2 hours</item>
+       	<item>4 hours</item>
+       	<item>8 hours</item>
+       	<item>12 hours</item>
+       	<item>1 day</item>
+    </string-array>
+    <string-array name="default_sync_interval_values">
+        <item>-1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>240</item>
+        <item>480</item>
+        <item>720</item>
+        <item>1440</item>
+    </string-array>
+    
+    <string-array name="default_notifications">
+        <item>Every update</item>
+        <item>Only personal updates</item>
+        <item>Never</item>
+    </string-array>
+    
+    <string-array name="default_notification_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    
+    <string-array name="themes">
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+    
+    <string-array name="theme_values">
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+    
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="actionbar_bg">#212121</color>
+    <color name="ics_light_blue">#33B5E5</color>
+    <color name="ics_dark_blue">#0099CC</color>
+    <color name="ics_light_green">#99CC00</color>
+    <color name="ics_dark_green">#669900</color>
+    <color name="below_ab_bg">#333333</color>
+     <color name="ics_light_orange">#FFBB33</color> 
+     <color name="ics_dark_orange">#FF8800</color> 
+    <color name="ics_light_grey">#E5E5E5</color>
+    <color name="background">#FFFFFF</color> 
+    
+         
+</resources>

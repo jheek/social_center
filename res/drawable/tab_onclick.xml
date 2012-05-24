@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- touch down -->
+    
+      <item
+        android:drawable="@null"
+        android:state_selected="false"
+        android:state_focused="false"
+        android:state_pressed="false"/>
+    
+    <item
+        android:drawable="@drawable/grey_for_tab_onclick"
+        android:state_pressed="true"/>
+    <!-- selected -->
+    <iteme
+        android:drawable="@null"
+        android:state_selected="true"
+        android:state_focused="false"
+        android:state_pressed="false"/>
+    
+    <item 
+        android:drawable="@null"
+        android:state_enabled="false"
+          android:state_selected="false"
+        android:state_focused="false"
+        android:state_pressed="false"
+        ></item>
+    <!-- disabled -->
+</selector>

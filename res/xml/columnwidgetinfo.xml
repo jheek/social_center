@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:minWidth="250dip"
+  android:minHeight="250dip"
+  android:updatePeriodMillis="3600000"
+  android:initialLayout="@layout/widget_layout"
+  android:autoAdvanceViewId="@id/listView" 
+  android:resizeMode="horizontal|vertical" 
+  android:minResizeHeight="110dip" 
+  android:minResizeWidth="110dip" 
+  android:configure="com.jldroid.twook.activities.ConfigurateWidgetActivity">
+</appwidget-provider>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#f8f8f8"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/messageBox"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+       
+        android:orientation="horizontal" >
+
+        <View
+            android:id="@+id/profileIV"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/no_profileimg_img" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/senderTV"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginBottom="2dip"
+                android:layout_marginRight="5dip"
+                android:layout_marginTop="10dp"
+                android:gravity="left"
+                android:text="Sender_name"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/infoTV"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dip"
+                android:layout_marginTop="2dp"
+                android:drawableLeft="@drawable/time_ago"
+                android:drawablePadding="5dp"
+                android:text="10 minutes ago via twoek"
+                android:textColor="#999999"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/msgTV"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:focusable="true"
+        android:linksClickable="true"
+        android:text="Message..."
+        android:textColorLink="#4695CE"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/attachmentsLoadingView"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal" >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:text="Loading image..." />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/attachmentsHolder"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginTop="3dp"
+        android:orientation="vertical" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/details_buttons_bg" >
+
+        <TextView
+            android:id="@+id/likesBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/list_selector"
+            android:drawableTop="@drawable/details_like"
+            android:gravity="center_horizontal"
+            android:text="99"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/shareBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/list_selector"
+            android:src="@drawable/details_share" />
+
+        <ImageButton
+            android:id="@+id/retweetBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/list_selector"
+            android:src="@drawable/details_retweet" />
+
+        <ImageButton
+            android:id="@+id/replyBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/list_selector"
+            android:src="@drawable/details_reply" />
+
+        <ImageButton
+            android:id="@+id/favoriteBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/list_selector"
+            android:src="@drawable/details_favorite" />
+
+        <ImageButton
+            android:id="@+id/likeBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/list_selector"
+            android:src="@drawable/details_like" />
+
+        <FrameLayout
+            android:id="@+id/likePB"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:visibility="gone" >
+
+            <com.actionbarsherlock.internal.widget.IcsProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_margin="8dp" 
+                android:layout_gravity="center_horizontal"/>
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

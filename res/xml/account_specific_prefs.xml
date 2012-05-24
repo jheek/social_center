@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <Preference android:key="deleteAccount" android:title="Remove account" android:summary="Remove this account and all its messages from Social Center"/>
+    <Preference android:key="color" android:title="Color" android:summary="Color shown at the bottom of each message from this account" android:persistent="false"/>
+</PreferenceScreen>

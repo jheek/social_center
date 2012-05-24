@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:orientation="vertical"
+    android:id="@+id/widget_item">
+    
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="5dp">
+		    <ImageView 
+		        android:id="@+id/profileIV" 
+		        android:layout_width="48dip" 
+		        android:layout_height="48dip"
+		        android:src="@drawable/no_profileimg_img"/>
+		    <ImageView 
+		        android:id="@+id/profileTypeIV" 
+		        android:layout_width="wrap_content" 
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentBottom="true"/>
+    	</RelativeLayout>
+
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical" >
+	
+	        <TextView
+	            android:id="@+id/senderTV"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:ellipsize="marquee"
+	            android:maxLines="1"
+	            android:textColor="#000"
+	            android:textStyle="bold" />
+	
+	        <TextView
+	            android:id="@+id/infoTV"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="2dip"
+	            android:layout_weight="1"
+	            android:textColor="#555"
+	            android:textSize="12dip" />
+	
+	        <TextView
+	            android:id="@+id/contentTV"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="2dp"
+	            android:layout_weight="1"
+	            android:ellipsize="marquee"
+	            android:maxLines="6"
+	            android:textColor="#000"
+	            android:textSize="14dip" />
+	    </LinearLayout>
+    </LinearLayout>
+    
+    <ImageView android:id="@+id/previewIV" android:layout_marginLeft="52dp" android:layout_width="100dp" android:layout_height="wrap_content"/>
+    
+</LinearLayout>

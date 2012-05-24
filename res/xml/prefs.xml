@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+	
+    <PreferenceCategory android:key="basic" android:title="Basic">
+        <Preference android:title="Columns" android:summary="Enable/Disable columns and edit column settings" android:key="columns"/>
+        <ListPreference android:title="Notifications" android:persistent="false" android:summary="Default notification behaviour" android:key="defaultNotification" android:entries="@array/default_notifications" android:dialogTitle="Notifications" android:entryValues="@array/default_notification_values"/>
+        <ListPreference android:title="Default update interval" android:persistent="false" android:entries="@array/default_sync_intervals" android:dialogTitle="Defalut update interval" android:key="defaultSyncInterval" android:entryValues="@array/default_sync_interval_values" android:summary="Amount of time between each update"/>
+        <!-- 
+        <ListPreference android:summary="App theme" android:title="Theme" android:key="theme" android:persistent="false" android:dialogTitle="Theme" android:negativeButtonText="Cancel" android:entryValues="@array/theme_values" android:entries="@array/themes"/>
+     	-->
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:key="twitterAccounts" android:title="Twitter">
+        <Preference android:key="addTwitterAccount" android:title="Add Twitter Account" android:order="2" />
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:key="facebookAccounts" android:title="Facebook">
+        <Preference android:key="addFacebookAccount" android:title="Add Facebook Account" android:order="2"/>
+    </PreferenceCategory>
+    
+	<PreferenceCategory android:key="advanced" android:title="Advanced">
+	    <CheckBoxPreference android:key="clearCacheWhenPause" android:title="Clear cache in background" android:summary="When enabled cache will be cleared when running in background. Only enable when device has little RAM"/>
+		<CheckBoxPreference android:key="showPreviews" android:title="Show image previews" android:defaultValue="true" android:summary="Enable to show an preview of an image in the feed"/>
+		<CheckBoxPreference android:summary="When enabled fancy animations like fades will be used more." android:title="Fancy animations" android:key="fancyAnimations" android:defaultValue="false"/>
+		
+		<CheckBoxPreference android:summary="Stop updating at a specific time" android:title="Update timeout" android:key="timeoutEnabled" android:defaultValue="false"/>
+		<com.jdroid.utils.TimePreference android:key="timeoutStart" android:summary="Start time of update timeout" android:title="Timout start" android:dependency="timeoutEnabled"/>
+		<com.jdroid.utils.TimePreference android:key="timeoutEnd" android:summary="end time of update timeout" android:title="Timout end" android:dependency="timeoutEnabled"/>
+		
+		<CheckBoxPreference android:summary="Stop updating at a specific time" android:title="Secondary Update timeout" android:key="timeout2Enabled" android:defaultValue="false"/>
+		<com.jdroid.utils.TimePreference android:key="timeout2Start" android:summary="Start time of update timeout" android:title="Secondary timout start" android:dependency="timeout2Enabled"/>
+		<com.jdroid.utils.TimePreference android:key="timeout2End" android:summary="end time of update timeout" android:title="Secondary timout end" android:dependency="timeout2Enabled"/>
+		
+		<Preference android:key="deleteCache" android:title="Delete data" android:summary="Delete all saved messages, profile pictures and cache"></Preference>
+		
+	</PreferenceCategory>
+</PreferenceScreen>
