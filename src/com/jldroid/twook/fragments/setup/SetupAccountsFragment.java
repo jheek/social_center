@@ -44,7 +44,7 @@ public class SetupAccountsFragment extends SherlockListFragment implements ISetu
 	@Override
 	public boolean isProceedAllowed() {
 		if (mAM.getAccountCount() == 0) {
-			Toast.makeText(getActivity().getApplicationContext(), R.string.add_at_least_one_account, Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity().getSherlockActivity().getApplicationContext(), R.string.add_at_least_one_account, Toast.LENGTH_LONG).show();
 		}
 		return mAM.getAccountCount() > 0;
 	}

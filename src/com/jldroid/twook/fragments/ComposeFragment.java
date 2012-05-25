@@ -134,7 +134,7 @@ public class ComposeFragment extends SherlockFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		getActionBar().setTitle(R.string.compose);
+		getSherlockActivity().getSupportActionBar().setTitle(R.string.compose);
 	}
 	
 	@Override
@@ -233,7 +233,7 @@ public class ComposeFragment extends SherlockFragment {
 			MainActivity a = (MainActivity) getActivity();
 			a.onBackPressed();
 		} else {
-			Toast.makeText(getActivity().getApplicationContext(), R.string.update_cannot_be_empty, Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity().getSherlockActivity().getApplicationContext(), R.string.update_cannot_be_empty, Toast.LENGTH_LONG).show();
 		}
 	}
 	

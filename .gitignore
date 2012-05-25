@@ -5,7 +5,7 @@ PrivateKeys.java
 ## Android
 #################
 gen/
-
+project.properties
 
 #################
 ## Eclipse

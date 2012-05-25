@@ -118,7 +118,7 @@ public class ChatFragment extends SherlockFragment implements OnClickListener, C
 							mChat.setDirty(false);
 							mListView.setSelection(mAdapter.getCount() - 1);
 						} else {
-							Toast.makeText(getApplicationContext(), R.string.failed_update, Toast.LENGTH_LONG).show();
+							Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.failed_update, Toast.LENGTH_LONG).show();
 						}
 					}
 				});
@@ -157,7 +157,7 @@ public class ChatFragment extends SherlockFragment implements OnClickListener, C
 				}
 			}
 		}
-		getActionBar().setTitle(sb.toString());
+		getSherlockActivity().getSupportActionBar().setTitle(sb.toString());
 		mChat.addListener(this);
 		mChat.setInForeground(true);
 		ChatUtils.updateChatNotification(getActivity().getApplicationContext(), mChat);
@@ -186,10 +186,10 @@ public class ChatFragment extends SherlockFragment implements OnClickListener, C
 			((ColoredFadeoutDrawable) mSendMsgBtn.getBackground()).startFadeout();
 			final String text = mMessageET.getText().toString();
 			if (mChat.getAccount() instanceof TwitterAccount && text.length() > 140) {
-				Toast.makeText(getApplicationContext(), getString(R.string.msg_too_long, 140), Toast.LENGTH_LONG).show();
+				Toast.makeText(getSherlockActivity().getApplicationContext(), getString(R.string.msg_too_long, 140), Toast.LENGTH_LONG).show();
 				return;
 			} else if (text.length() == 0) {
-				Toast.makeText(getApplicationContext(), R.string.msg_cant_send_empty, Toast.LENGTH_LONG).show();
+				Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.msg_cant_send_empty, Toast.LENGTH_LONG).show();
 				return;
 			}
 			final ProgressDialog dialog = ProgressDialog.show(getActivity(), getString(R.string.msg_sending), getString(R.string.pb_msg_please_wait), true, false);
@@ -204,7 +204,7 @@ public class ChatFragment extends SherlockFragment implements OnClickListener, C
 							if (r) {
 								mMessageET.setText("");
 							} else {
-								Toast.makeText(getApplicationContext(), R.string.failed_send_msg, Toast.LENGTH_LONG).show();
+								Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.failed_send_msg, Toast.LENGTH_LONG).show();
 							}
 						}
 					});

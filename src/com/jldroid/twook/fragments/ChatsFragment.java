@@ -28,11 +28,11 @@ public class ChatsFragment extends SherlockFragment {
 	@Override
 	public void onActivityCreated(Bundle pSavedInstanceState) {
 		super.onActivityCreated(pSavedInstanceState);
-		ActionBar ab = getActionBar();
+		ActionBar ab = getSherlockActivity().getSupportActionBar();
 		ab.setTitle(R.string.chats);
 		ab.setIcon(R.drawable.ab_icon_messages);
 		
-		mChats = ColumnManager.getInstance(getApplicationContext()).getMessagesProvider();
+		mChats = ColumnManager.getInstance(getSherlockActivity().getApplicationContext()).getMessagesProvider();
 		
 		mColumnView.setProvider(mChats, false);
 	}

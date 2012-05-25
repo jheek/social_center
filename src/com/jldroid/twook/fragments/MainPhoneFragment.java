@@ -82,7 +82,7 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
     	
         if (mColumnName != null) {
         	mColumnName = null;
-        	setColumn(getApplicationContext(), mColumnName);
+        	setColumn(getSherlockActivity().getApplicationContext(), mColumnName);
         }
 	}
 	
@@ -127,7 +127,7 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 			}
 			break;
 		case 2: // search
-			a.startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+			a.startActivity(new Intent(getSherlockActivity().getApplicationContext(), SearchActivity.class));
 			break;
 		case 3: // Settings
 			a.showSettings();
@@ -185,9 +185,9 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 			checkUpdate(provider);
 		}
 		
-		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		getActionBar().setDisplayShowTitleEnabled(false);
-		getActionBar().setDisplayShowHomeEnabled(false);
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		getSherlockActivity().getSupportActionBar().setDisplayShowTitleEnabled(false);
+		getSherlockActivity().getSupportActionBar().setDisplayShowHomeEnabled(false);
 	}
 	
 	@Override
@@ -200,20 +200,20 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 			cv.onStop();
 		}
 		
-		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		getActionBar().setDisplayShowTitleEnabled(true);
-		getActionBar().setDisplayShowHomeEnabled(true);
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		getSherlockActivity().getSupportActionBar().setDisplayShowTitleEnabled(true);
+		getSherlockActivity().getSupportActionBar().setDisplayShowHomeEnabled(true);
 	}
 	
 	@Override
 	public void onColumnsChanged() {
-		getActionBar().removeAllTabs();
+		getSherlockActivity().getSupportActionBar().removeAllTabs();
 		for (int i = 0; i < mCM.getEnabledColumnCount(); i++) {
 			ColumnInfo info = mCM.getEnabledColumnInfo(i);
-			Tab tab = getActionBar().newTab();
+			Tab tab = getSherlockActivity().getSupportActionBar().newTab();
 			tab.setText(info.getProvider().getName(getActivity()));
 			tab.setTabListener(this);
-			getActionBar().addTab(tab);
+			getSherlockActivity().getSupportActionBar().addTab(tab);
 		}
 		mAdapter.notifyDataSetChanged();
 	}
@@ -229,7 +229,7 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
     @Override
 	public void onPageSelected(int pArg0) {
     	ColumnMessagesProvider provider = mCM.getEnabledColumnInfo(pArg0).getProvider();
-    	getActionBar().setSelectedNavigationItem(pArg0);
+    	getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(pArg0);
     	checkIsUpdating(provider);
     	checkUpdate(provider);
 	}

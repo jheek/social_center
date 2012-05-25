@@ -62,7 +62,7 @@ public class PeopleFragment extends SherlockFragment {
 			public void onItemClick(AdapterView<?> pParent, View pView, int pPosition, long pId) {
 				Object item = mAdapter.getItem(pPosition);
 				if (item instanceof User) {
-					getActivity().startActivity(new Intent(getApplicationContext(), ViewProfileActivity.class)
+					getActivity().startActivity(new Intent(getSherlockActivity().getApplicationContext(), ViewProfileActivity.class)
 						.putExtra(ViewProfileFragment.EXTRA_ACCOUNT, mAccount.getUser().id)
 						.putExtra(ViewProfileFragment.EXTRA_USER, ((User) item).id));
 				}
@@ -92,7 +92,7 @@ public class PeopleFragment extends SherlockFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		getActionBar().setTitle(R.string.people);
+		getSherlockActivity().getSupportActionBar().setTitle(R.string.people);
 	}
 	
 	protected void populatePeople() {
@@ -143,7 +143,7 @@ public class PeopleFragment extends SherlockFragment {
 					@Override
 					public void run() {
 						mRefreshItem.setActionView(null);
-						Toast.makeText(getApplicationContext(), R.string.failed_update, Toast.LENGTH_LONG).show();
+						Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.failed_update, Toast.LENGTH_LONG).show();
 					}
 				});
 				

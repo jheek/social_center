@@ -62,7 +62,7 @@ public class AlbumFragment extends SherlockFragment implements OnItemClickListen
 	@Override
 	public void onActivityCreated(Bundle pSavedInstanceState) {
 		super.onActivityCreated(pSavedInstanceState);
-		getActionBar().setTitle(mAlbum.name);
+		getSherlockActivity().getSupportActionBar().setTitle(mAlbum.name);
 		
 		mGridView.setAdapter(mAdapter = new MyAdapter());
 		
@@ -110,7 +110,7 @@ public class AlbumFragment extends SherlockFragment implements OnItemClickListen
 							mPhotos = photos;
 							mAdapter.notifyDataSetChanged();
 						} else {
-							Toast.makeText(getActivity().getApplicationContext(), R.string.failed_load_photos, Toast.LENGTH_LONG).show();
+							Toast.makeText(getActivity().getSherlockActivity().getApplicationContext(), R.string.failed_load_photos, Toast.LENGTH_LONG).show();
 						}
 					}
 				});

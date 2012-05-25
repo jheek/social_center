@@ -86,7 +86,7 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 		mViews[0] = mMessagesColumnView;
 		mViews[1] = mPeopleListView;
 		mViewPager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		mSearchView = new EditText(getActionBar().getThemedContext());
+		mSearchView = new EditText(getSherlockActivity().getSupportActionBar().getThemedContext());
 		mSearchView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		mSearchView.setHint(R.string.search_hint);
 		mSearchView.setTextColor(Color.WHITE);
@@ -117,7 +117,7 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 		mViewPager.setOnPageChangeListener(this);
 		
 		mSearchColumn = new SearchColumn();
-		AccountsManager am = AccountsManager.getInstance(getApplicationContext());
+		AccountsManager am = AccountsManager.getInstance(getSherlockActivity().getApplicationContext());
 		for (int i = 0; i < am.getAccountCount(); i++) {
 			mSearchColumn.addAccount(am.getAccount(i));
 		}
@@ -128,7 +128,7 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 		mPeopleListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> pParent, View pView, int pPosition, long pId) {
-				AccountsManager am = AccountsManager.getInstance(getApplicationContext());
+				AccountsManager am = AccountsManager.getInstance(getSherlockActivity().getApplicationContext());
 				User user = mPeople.get(pPosition);
 				if (!am.viewProfile((MainActivity) getActivity(), user)) {
 					IAccount account = null;
@@ -171,21 +171,21 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 	@Override
 	public void onStart() {
 		super.onStart();
-		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		int selected = getActionBar().getSelectedNavigationIndex();
-		getActionBar().removeAllTabs();
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		int selected = getSherlockActivity().getSupportActionBar().getSelectedNavigationIndex();
+		getSherlockActivity().getSupportActionBar().removeAllTabs();
 		for (int i = 0; i < TABS.length; i++) {
-			getActionBar().addTab(getActionBar().newTab().setText(TABS[i]).setTabListener(this));
+			getSherlockActivity().getSupportActionBar().addTab(getSherlockActivity().getSupportActionBar().newTab().setText(TABS[i]).setTabListener(this));
 		}
 		if (selected >= 0 && selected < TABS.length) {
-			getActionBar().setSelectedNavigationItem(selected);
+			getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(selected);
 		}
 		if (mInitQuery != null && isInitPeople) {
-			getActionBar().setSelectedNavigationItem(1);
+			getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);
 			isInitPeople = false;
 		}
-		getActionBar().setCustomView(mSearchView);
-		getActionBar().setDisplayShowCustomEnabled(true);
+		getSherlockActivity().getSupportActionBar().setCustomView(mSearchView);
+		getSherlockActivity().getSupportActionBar().setDisplayShowCustomEnabled(true);
 		mSearchView.requestFocus();
 		InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(mSearchView, InputMethodManager.SHOW_FORCED);
@@ -195,18 +195,18 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 	@Override
 	public void onStop() {
 		super.onStop();
-		getActionBar().setCustomView(null);
-		getActionBar().setDisplayShowCustomEnabled(false);
-		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		getSherlockActivity().getSupportActionBar().setCustomView(null);
+		getSherlockActivity().getSupportActionBar().setDisplayShowCustomEnabled(false);
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		mMessagesColumnView.onStop();
 	}
 	
 	protected void checkIsUpdating() {
-		if (mSearchItem != null && getActionBar() != null) {
+		if (mSearchItem != null && getSherlockActivity().getSupportActionBar() != null) {
 			Threads.runOnUIThread(new Runnable() {
 				@Override
 				public void run() {
-					int pos = getActionBar().getSelectedNavigationIndex();
+					int pos = getSherlockActivity().getSupportActionBar().getSelectedNavigationIndex();
 					if ((pos == 0 && mSearchColumn.isUpdating()) || (pos == 1 && isPeopleUpdating)) {
 						mSearchItem.setActionView(R.layout.ab_progressbar);
 					} else {
@@ -232,7 +232,7 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 	}
 	
 	protected void doSearch() {
-		int pos = getActionBar().getSelectedTab().getPosition();
+		int pos = getSherlockActivity().getSupportActionBar().getSelectedTab().getPosition();
 		if (pos == 0) {
 			mSearchColumn.requestUpdate(null);
 		} else if (pos == 1) {
@@ -244,7 +244,7 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 		String query = mSearchView.getText().toString();
 		mPeople.clear();
 		if (!TextUtils.isEmpty(query)) {
-			AccountsManager am = AccountsManager.getInstance(getApplicationContext());
+			AccountsManager am = AccountsManager.getInstance(getSherlockActivity().getApplicationContext());
 			for (int i = am.getAccountCount() - 1; i >= 0; i--) {
 				am.getAccount(i).searchPeopleLocal(mPeople, query);
 			}
@@ -263,7 +263,7 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 					ListUtils.clone(mPeople, newPeople);
 					String query = mSearchView.getText().toString();
 					if (!TextUtils.isEmpty(query)) {
-						AccountsManager am = AccountsManager.getInstance(getApplicationContext());
+						AccountsManager am = AccountsManager.getInstance(getSherlockActivity().getApplicationContext());
 						if (am.getFacebookAccountCount() > 0) {
 							am.getFacebookAccount(0).searchPeople(newPeople, query);
 						}
@@ -307,7 +307,7 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 	}
 	@Override
 	public void onPageSelected(int pArg0) {
-		getActionBar().setSelectedNavigationItem(pArg0);
+		getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(pArg0);
 		checkIsUpdating();
 	}
 	

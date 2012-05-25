@@ -180,23 +180,23 @@ public class ViewProfileFragment extends SherlockFragment implements OnPageChang
 	@Override
 	public void onStart() {
 		super.onStart();
-		getActionBar().setTitle(mUser.name);
-		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		int selected = getActionBar().getSelectedNavigationIndex();
+		getSherlockActivity().getSupportActionBar().setTitle(mUser.name);
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		int selected = getSherlockActivity().getSupportActionBar().getSelectedNavigationIndex();
 		
 		for (int i = 0; i < mTabs.length; i++) {
-			getActionBar().addTab(getActionBar().newTab().setText(mTabs[i]).setTabListener(this));
+			getSherlockActivity().getSupportActionBar().addTab(getSherlockActivity().getSupportActionBar().newTab().setText(mTabs[i]).setTabListener(this));
 		}
 		if (selected >= 0 && selected < mTabs.length) {
-			getActionBar().setSelectedNavigationItem(selected);
+			getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(selected);
 		}
 	}
 	
 	@Override
 	public void onStop() {
 		super.onStop();
-		getActionBar().removeAllTabs();
-		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		getSherlockActivity().getSupportActionBar().removeAllTabs();
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 	}
 	
 	@Override
@@ -238,10 +238,10 @@ public class ViewProfileFragment extends SherlockFragment implements OnPageChang
 								public void run() {
 									if (mIsFriend == 1) {
 										mIsFriend = 0;
-										Toast.makeText(getApplicationContext(), getString(R.string.unfollowed, mUser.name), Toast.LENGTH_LONG).show();
+										Toast.makeText(getSherlockActivity().getApplicationContext(), getString(R.string.unfollowed, mUser.name), Toast.LENGTH_LONG).show();
 									} else {
 										mIsFriend = 1;
-										Toast.makeText(getApplicationContext(), getString(user.isFollowRequestSent() ? R.string.follow_requested : R.string.following, mUser.name), Toast.LENGTH_LONG).show();
+										Toast.makeText(getSherlockActivity().getApplicationContext(), getString(user.isFollowRequestSent() ? R.string.follow_requested : R.string.following, mUser.name), Toast.LENGTH_LONG).show();
 									}
 									updateChangeRelationItem();
 								}
@@ -251,7 +251,7 @@ public class ViewProfileFragment extends SherlockFragment implements OnPageChang
 							Threads.runOnUIThread(new Runnable() {
 								@Override
 								public void run() {
-									Toast.makeText(getApplicationContext(), getString(mIsFriend == 1 ? R.string.failed_unfollow : R.string.failed_follow, mUser.name), Toast.LENGTH_LONG).show();
+									Toast.makeText(getSherlockActivity().getApplicationContext(), getString(mIsFriend == 1 ? R.string.failed_unfollow : R.string.failed_follow, mUser.name), Toast.LENGTH_LONG).show();
 								}
 							});
 						}
@@ -292,7 +292,7 @@ public class ViewProfileFragment extends SherlockFragment implements OnPageChang
 	
 	@Override
 	public void onPageSelected(int pArg0) {
-		getActionBar().setSelectedNavigationItem(pArg0);
+		getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(pArg0);
 	}
 	
 	private void loadInfo() {
