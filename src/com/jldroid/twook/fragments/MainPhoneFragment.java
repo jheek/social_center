@@ -251,8 +251,10 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
     private void checkIsUpdating(ColumnMessagesProvider provider) {
     	if (provider.isUpdating()) {
 			mRefreshItem.setActionView(R.layout.ab_progressbar);
+			mRefreshItem.expandActionView();
 		} else {
 			mRefreshItem.setActionView(null);
+			mRefreshItem.collapseActionView();
 		}
     }
     

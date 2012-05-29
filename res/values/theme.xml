@@ -12,8 +12,6 @@
         <item name="DetailsViewStyle">@style/DetailsView.Light</item>
         
         <item name="menuBackground">#454545</item>
-        <item name="android:actionBarStyle">@style/ActionBar.Light</item>
-        <item name="actionBarStyle">@style/ActionBar.Light</item>
     </style>
 
     <style name="CustomTheme.Dark" parent="android:Theme.Black.NoTitleBar">

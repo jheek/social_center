@@ -111,18 +111,6 @@
         <item name="commentsBackground">@null</item>
     </style>
 
-    <style name="ActionBar" />
-    <style name="ActionBar.Light" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-        <item name="background">@drawable/ab_background2</item>
-        <item name="android:background">@drawable/ab_background2</item>
-        <item name="absForceOverflow">true</item>
-    </style>
-    <style name="ActionBar.Dark" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-        <item name="background">@drawable/ab_background2</item>
-        <item name="android:background">@drawable/ab_background2</item>
-        <item name="absForceOverflow">true</item>
-    </style>
-
     <style name="Animations" />
 
     <!-- PopDownMenu -->
