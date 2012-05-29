@@ -33,7 +33,6 @@
         <activity
             android:name=".activities.MainActivity"
             android:clearTaskOnLaunch="true"
-            android:configChanges="mcc|mnc|keyboard|keyboardHidden|orientation|uiMode|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:stateNotNeeded="true"

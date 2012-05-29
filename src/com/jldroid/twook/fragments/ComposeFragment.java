@@ -46,6 +46,8 @@ import com.jdroid.utils.SortedArrayList;
 
 public class ComposeFragment extends SherlockFragment {
 
+	public static final String EXTRA_CONFIG = "com.jldroid.twook.CONFIG";
+	
 	private static final int CHARACTERS_LEFT_GOOD_COLOR = 0xFF669900;
 	private static final int CHARACTERS_LEFT_NORMAL_COLOR = 0xFFF88017;
 	private static final int CHARACTERS_LEFT_BAD_COLOR = 0xFFE41B17;
@@ -61,12 +63,10 @@ public class ComposeFragment extends SherlockFragment {
 	
 	private MenuItem mAddAttachmentItem;
 	
-	public ComposeFragment() {
-		this(new ComposeConfig(ComposeMode.STATUS_UPDATE));
-	}
-	
-	public ComposeFragment(ComposeConfig config) {
-		mConfig = config;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mConfig = new ComposeConfig(getArguments().getBundle(EXTRA_CONFIG));
 	}
 	
 	@Override
@@ -233,7 +233,7 @@ public class ComposeFragment extends SherlockFragment {
 			MainActivity a = (MainActivity) getActivity();
 			a.onBackPressed();
 		} else {
-			Toast.makeText(getActivity().getSherlockActivity().getApplicationContext(), R.string.update_cannot_be_empty, Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity().getApplicationContext(), R.string.update_cannot_be_empty, Toast.LENGTH_LONG).show();
 		}
 	}
 	
@@ -336,6 +336,13 @@ public class ComposeFragment extends SherlockFragment {
 		public String template;
 		public String imgPath;
 		
+		public ComposeConfig(Bundle bundle) {
+			mode = ComposeMode.valueOf(bundle.getString("mode"));
+			targetID = bundle.getLong("targetID", 0);
+			byte[] bytes = bundle.getByteArray("targetUser");
+			
+		}
+		
 		public ComposeConfig(ComposeMode mode) {
 			this(mode, -1, null, null);
 		}
@@ -353,6 +360,18 @@ public class ComposeFragment extends SherlockFragment {
 			this.targetID = targetID;
 			this.targetUser = targetUser;
 			this.imgPath = imgPath;
+		}
+		
+		public Bundle asBundle() {
+			Bundle bundle = new Bundle(5);
+			bundle.putString("mode", mode.name());
+			bundle.putLong("targetID", targetID);
+			bundle.putString(template, imgPath);
+			bundle.putString("imgPath", imgPath);
+			if (targetUser != null) {
+				bundle.putByteArray("targetUser", targetUser.updateBundle().getBytes());
+			}
+			return bundle;
 		}
 	}
 	

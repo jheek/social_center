@@ -110,7 +110,7 @@ public class AlbumFragment extends SherlockFragment implements OnItemClickListen
 							mPhotos = photos;
 							mAdapter.notifyDataSetChanged();
 						} else {
-							Toast.makeText(getActivity().getSherlockActivity().getApplicationContext(), R.string.failed_load_photos, Toast.LENGTH_LONG).show();
+							Toast.makeText(getActivity().getApplicationContext(), R.string.failed_load_photos, Toast.LENGTH_LONG).show();
 						}
 					}
 				});

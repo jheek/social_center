@@ -26,6 +26,8 @@ import android.widget.Toast;
 import com.jdroid.utils.StorageManager;
 import com.jdroid.utils.Threads;
 import com.jldroid.twook.R;
+import com.jldroid.twook.activities.ChatActivity;
+import com.jldroid.twook.activities.ChatsActivity;
 import com.jldroid.twook.activities.DetailsActivity;
 import com.jldroid.twook.activities.MainActivity;
 import com.jldroid.twook.fragments.ChatFragment;
@@ -138,28 +140,25 @@ public class ColumnView extends RelativeLayout implements ColumnProviderListener
 		if (mProvider != null) {
 			mProvider.removeListener(this);
 		}
-		updateLastReadMessage(true);
+		updateLastReadMessage();
 	}
 	
 	@Override
 	public void onScroll(AbsListView pView, int pFirstVisibleItem, int pVisibleItemCount, int pTotalItemCount) {
-		updateLastReadMessage(false);
+		updateLastReadMessage();
 	}
 	
 	@Override
 	public void onScrollStateChanged(AbsListView pView, int pScrollState) {
 	}
 	
-	private void updateLastReadMessage(boolean save) {
+	private void updateLastReadMessage() {
 		if (mInfo != null) {
 			int pos = mListView.getFirstVisiblePosition();
 			if (pos >= 0 && pos < mProvider.getMessageCount()) {
 				Message msg = mProvider.getMessage(pos);
 				View firstView = mListView.getChildAt(0);
 				mInfo.setLastReadMessage(msg.ID, msg.type, firstView != null ? firstView.getTop() : 0);
-				if (save) {
-					StorageManager.getDeflaut(getContext()).flushAsync(5000);
-				}
 			}
 		}
 	}
@@ -233,7 +232,8 @@ public class ColumnView extends RelativeLayout implements ColumnProviderListener
 	
 	protected void showDetails(final Message msg) {
 		if (msg.isChat()) {
-			((MainActivity) getContext()).showFragment(new ChatFragment(msg.getChat()));
+			getContext().startActivity(new Intent(getContext(), ChatActivity.class)
+					.putExtra(ChatFragment.EXTRA_CHAT_MSG, Message.createMessageBundle(null, msg)));
 		} else if (msg.isDetailsMessageLocalAvailable()) {
 			startDetails(msg.getDetailsMessage());
 		} else {

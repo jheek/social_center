@@ -1396,6 +1396,9 @@ public class FacebookAccount implements IAccount, PacketListener {
 				for (int i = messages.length() - 1; i >= 0; i--) {
 					JSONObject message = messages.getJSONObject(i);
 					Message msg = Message.parseFacebookMessage(this, message, users);
+					if (msg.sender == null) {
+						continue; // workaround for facebook bug
+					}
 					msg.updateBundle();
 					int index = mMessages.newList.indexOf(msg);
 					if (index != -1) {

@@ -26,6 +26,7 @@ import com.jldroid.twook.ChatUtils;
 import com.jldroid.twook.FastBitmapDrawable;
 import com.jldroid.twook.R;
 import com.jldroid.twook.model.Chat;
+import com.jldroid.twook.model.Message;
 import com.jldroid.twook.model.Chat.ChatListener;
 import com.jldroid.twook.model.ChatMessage;
 import com.jldroid.twook.model.ImageManager.LoadBitmapCallback;
@@ -37,6 +38,8 @@ import com.jldroid.twook.view.ProfileImageDrawable;
 
 public class ChatFragment extends SherlockFragment implements OnClickListener, ChatListener {
 
+	public static final String EXTRA_CHAT_MSG = "com.jldroid.twook.CHAT_MSG";
+	
 	private final int MAX_RECIPIENTS = 3;
 	private static final int COLORED_FADEOUT_COLOR = 0xff008FD5;
 	
@@ -51,8 +54,17 @@ public class ChatFragment extends SherlockFragment implements OnClickListener, C
 	
 	protected MenuItem mRefreshItem;
 	
-	public ChatFragment(Chat chat) {
-		mChat = chat;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Message msg = Message.findMessage(getActivity(), getArguments().getBundle(EXTRA_CHAT_MSG));
+		if (msg != null) {
+			mChat = msg.getChat();
+		}
+		if (mChat == null) {
+			getActivity().onBackPressed();
+			// TODO handle this someway...
+		}
 	}
 	
 	@Override

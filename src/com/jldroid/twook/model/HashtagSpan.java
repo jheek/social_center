@@ -1,13 +1,12 @@
 package com.jldroid.twook.model;
 
-import com.jldroid.twook.activities.MainActivity;
-import com.jldroid.twook.fragments.SearchFragment;
-
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.text.style.ClickableSpan;
 import android.view.View;
+
+import com.jldroid.twook.activities.SearchActivity;
+import com.jldroid.twook.fragments.SearchFragment;
 
 public class HashtagSpan extends ClickableSpan {
 
@@ -19,11 +18,10 @@ public class HashtagSpan extends ClickableSpan {
 	
 	@Override
 	public void onClick(View pWidget) {
-		Activity a = (Activity) pWidget.getContext();
-		if (a instanceof MainActivity) {
-			MainActivity ma = (MainActivity) a;
-			ma.showFragment(new SearchFragment(mText, false));
-		}
+		Context c = pWidget.getContext();
+		pWidget.getContext().startActivity(new Intent(c, SearchActivity.class)
+				.putExtra(SearchFragment.EXTRA_QUERY, mText)
+				.putExtra(SearchFragment.EXTRA_TYPE, SearchFragment.TYPE_MESSAGES));
 	}
 	
 

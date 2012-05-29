@@ -2,6 +2,7 @@ package com.jldroid.twook.fragments;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -25,12 +26,16 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.astuetz.viewpagertabs.ViewPagerTabProvider;
-import com.astuetz.viewpagertabs.ViewPagerTabs;
 import com.jdroid.utils.Threads;
 import com.jldroid.twook.R;
+import com.jldroid.twook.activities.ChatsActivity;
+import com.jldroid.twook.activities.ComposeActivity;
+import com.jldroid.twook.activities.DonateActivity;
 import com.jldroid.twook.activities.MainActivity;
+import com.jldroid.twook.activities.PeopleActivity;
+import com.jldroid.twook.activities.PrefsActivity;
 import com.jldroid.twook.activities.SearchActivity;
+import com.jldroid.twook.activities.SetupActivity;
 import com.jldroid.twook.model.ColumnInfo;
 import com.jldroid.twook.model.ColumnManager;
 import com.jldroid.twook.model.ColumnManager.OnColumnsChangeListener;
@@ -57,8 +62,6 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 	
 	protected MenuItem mRefreshItem;
 	
-	private String mColumnName = null;
-	
 	@Override
 	public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, Bundle pSavedInstanceState) {
 		View v = pInflater.inflate(R.layout.main_phone, null);
@@ -79,11 +82,10 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
     	mViewPager.setAdapter(mAdapter);
     	
         mViewPager.setOnPageChangeListener(this);
-    	
-        if (mColumnName != null) {
-        	mColumnName = null;
-        	setColumn(getSherlockActivity().getApplicationContext(), mColumnName);
-        }
+        
+        if (getArguments() != null && getArguments().containsKey(MainActivity.EXTRA_COLUMN)) {
+			setColumn(getActivity(), getArguments().getString(MainActivity.EXTRA_COLUMN));
+		}
 	}
 	
 	@Override
@@ -101,7 +103,7 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem pItem) {
-		MainActivity a = (MainActivity) getActivity();
+		Activity a = getActivity();
 		switch (pItem.getItemId()) {
 		case 1: // refresh
 			int currentItem = mViewPager.getCurrentItem();
@@ -127,25 +129,25 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 			}
 			break;
 		case 2: // search
-			a.startActivity(new Intent(getSherlockActivity().getApplicationContext(), SearchActivity.class));
+			a.startActivity(new Intent(a.getApplicationContext(), SearchActivity.class));
 			break;
 		case 3: // Settings
-			a.showSettings();
+			a.startActivity(new Intent(a.getApplicationContext(), PrefsActivity.class));
 			break;
 		case 4: // setup
-			a.showSetup();
+			a.startActivity(new Intent(a.getApplicationContext(), SetupActivity.class));
 			break;
 		case 5: // donate
-			a.showFragment(new DonateFragment());
+			a.startActivity(new Intent(a.getApplicationContext(), DonateActivity.class));
 			break;
 		case 6: // compose
-			a.showFragment(new ComposeFragment());
+			a.startActivity(new Intent(a.getApplicationContext(), ComposeActivity.class));
 			break;
 		case 7: // chat
-			a.showFragment(new ChatsFragment());
+			a.startActivity(new Intent(a.getApplicationContext(), ChatsActivity.class));
 			break;
 		case 8: // people
-			a.showFragment(new PeopleFragment());
+			a.startActivity(new Intent(a.getApplicationContext(), PeopleActivity.class));
 			break;
 		default:
 			break;
@@ -155,7 +157,6 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 	
 	public void setColumn(Context c, String storageName) {
 		if (getActivity() == null || mViewPager == null) {
-			mColumnName = storageName;
 			return;
 		}
 		mCM = ColumnManager.getInstance(c);

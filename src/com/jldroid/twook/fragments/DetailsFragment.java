@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -39,6 +40,7 @@ import com.jdroid.utils.StorageManager.StorageBundle;
 import com.jdroid.utils.Threads;
 import com.jdroid.utils.TimeUtils;
 import com.jldroid.twook.R;
+import com.jldroid.twook.activities.ComposeActivity;
 import com.jldroid.twook.activities.DetailsActivity;
 import com.jldroid.twook.activities.MainActivity;
 import com.jldroid.twook.activities.ViewProfileActivity;
@@ -299,10 +301,11 @@ public class DetailsFragment extends SherlockFragment {
 		case 6: // retweet
 			ComposeConfig config = new ComposeConfig(ComposeMode.TWITTER_RETWEET, mMessage.ID, mMessage.sender);
 			config.template = mMessage.text;
-			((MainActivity) getActivity()).showFragment(new ComposeFragment(config));
+			getActivity().startActivity(new Intent(getActivity(), ComposeActivity.class).putExtra(ComposeFragment.EXTRA_CONFIG, config.asBundle()));
 			break;
 		case 7: // reply
-			((MainActivity) getActivity()).showFragment(new ComposeFragment(new ComposeConfig(ComposeMode.TWITTER_REPLY, mMessage.ID, mMessage.sender)));
+			config = new ComposeConfig(ComposeMode.TWITTER_REPLY, mMessage.ID, mMessage.sender);
+			getActivity().startActivity(new Intent(getActivity(), ComposeActivity.class).putExtra(ComposeFragment.EXTRA_CONFIG, config.asBundle()));
 			break;
 		case 8: // favorite
 			break;
@@ -442,14 +445,9 @@ public class DetailsFragment extends SherlockFragment {
 	
 	protected void updateLikes() {
 		int likes = mMessage.numLikes;
-		/*if (likes == 0){ 
-			mLikesBtn.setText(getActivity().getString(R.string.no_likes_yet));
-		} else if (likes == 1) { 
-			mLikesBtn.setText(getActivity().getString(R.string.one_like));
-		} else { 
-			mLikesBtn.setText(likes + " " + getActivity().getString(R.string.likes));	
-		}*/
-		mLikesItem.setTitle(String.valueOf(likes));
+		if (mLikesItem != null) {
+			mLikesItem.setTitle(String.valueOf(likes));
+		}
 	}
 	
 	protected void updateImages() {
@@ -481,8 +479,7 @@ public class DetailsFragment extends SherlockFragment {
 												iv.setOnClickListener(new OnClickListener() {
 													@Override
 													public void onClick(View pV) {
-														((MainActivity) getActivity()).showFragment(new ViewImageFragment(pBmd));
-														//startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(img.href)));
+														startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(img.href)).setType("image/*"));
 													}
 												});
 												iv.setImageBitmap(pBmd);

@@ -1,6 +1,5 @@
 package com.jldroid.twook.fragments;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -45,6 +43,13 @@ import com.jldroid.twook.view.UserAdapter;
 
 public class SearchFragment extends SherlockFragment implements OnPageChangeListener, TabListener, TextWatcher, ColumnProviderListener {
 
+	public static final int TYPE_UNKNOWN = -1;
+	public static final int TYPE_PEOPLE = 0;
+	public static final int TYPE_MESSAGES = 1;
+	
+	public static final String EXTRA_QUERY = "com.jldroid.twook.QUERY";
+	public static final String EXTRA_TYPE = "com.jldroid.twook.TYPE";
+	
 	protected static final int[] TABS = {R.string.tab_messages, R.string.tab_people};
 	
 	private ViewPager mViewPager;
@@ -66,16 +71,10 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 	
 	private boolean isPeopleUpdating = false;
 	
-	private String mInitQuery;
-	private boolean isInitPeople;
 	
-	public SearchFragment() {
-		
-	}
-	
-	public SearchFragment(String query, boolean isPeople) {
-		mInitQuery = query;
-		isInitPeople = isPeople;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 	}
 	
 	@Override
@@ -145,10 +144,29 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 		
 		mSearchColumn.addListener(this);
 		
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		for (int i = 0; i < TABS.length; i++) {
+			getSherlockActivity().getSupportActionBar().addTab(getSherlockActivity().getSupportActionBar().newTab().setText(TABS[i]).setTabListener(this));
+		}
+		switch (getArguments().getInt(EXTRA_TYPE, TYPE_UNKNOWN)) {
+		case TYPE_PEOPLE:
+			getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);
+			break;
+		case TYPE_MESSAGES:
+		case TYPE_UNKNOWN:
+			getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(0);
+		default:
+			break;
+		}
+		getSherlockActivity().getSupportActionBar().setCustomView(mSearchView);
+		getSherlockActivity().getSupportActionBar().setDisplayShowCustomEnabled(true);
+		mSearchView.requestFocus();
+		
 		setHasOptionsMenu(true);
 		
-		if (mInitQuery != null) {
-			mSearchView.setText(mInitQuery);
+		String q = getArguments().getString(EXTRA_QUERY);
+		if (q != null) {
+			mSearchView.setText(q);
 		}
 	}
 	
@@ -171,24 +189,6 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 	@Override
 	public void onStart() {
 		super.onStart();
-		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		int selected = getSherlockActivity().getSupportActionBar().getSelectedNavigationIndex();
-		getSherlockActivity().getSupportActionBar().removeAllTabs();
-		for (int i = 0; i < TABS.length; i++) {
-			getSherlockActivity().getSupportActionBar().addTab(getSherlockActivity().getSupportActionBar().newTab().setText(TABS[i]).setTabListener(this));
-		}
-		if (selected >= 0 && selected < TABS.length) {
-			getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(selected);
-		}
-		if (mInitQuery != null && isInitPeople) {
-			getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);
-			isInitPeople = false;
-		}
-		getSherlockActivity().getSupportActionBar().setCustomView(mSearchView);
-		getSherlockActivity().getSupportActionBar().setDisplayShowCustomEnabled(true);
-		mSearchView.requestFocus();
-		InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(mSearchView, InputMethodManager.SHOW_FORCED);
         mMessagesColumnView.onStart();
 	}
 	

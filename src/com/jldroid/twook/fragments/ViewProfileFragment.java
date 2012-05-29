@@ -279,7 +279,7 @@ public class ViewProfileFragment extends SherlockFragment implements OnPageChang
 	@Override
 	public void onClick(View pV) {
 		if (pV == mInfoProfileView) {
-			((MainActivity) getActivity()).showFragment(new ViewImageFragment(mProfileBmd));
+			// TODO ((MainActivity) getActivity()).showFragment(new ViewImageFragment(mProfileBmd));
 		}
 	}
 	

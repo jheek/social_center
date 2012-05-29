@@ -3,6 +3,7 @@ package com.jldroid.twook.activities;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,7 +42,7 @@ import java.util.ArrayList;
 import com.jdroid.utils.SortedArrayList;
 import com.jdroid.utils.StorageManager;
 
-public class MainActivity extends SherlockFragmentActivity implements OnBackStackChangedListener {
+public class MainActivity extends SherlockFragmentActivity {
 	
 	public static final String EXTRA_COLUMN = "com.jldroid.twook.COLUMN";
 	public static final String EXTRA_MESSAGE_ID = "com.jldroid.twook.ID";
@@ -54,9 +55,7 @@ public class MainActivity extends SherlockFragmentActivity implements OnBackStac
 	
 	private SharedPreferences mPrefs;
 	
-	private int mCurrentRootID = 0;
-	
-	private boolean isStarted = false;
+	private MainPhoneFragment mFrag;
 	
 	@Override
 	protected void onCreate(Bundle pArg0) {
@@ -65,43 +64,39 @@ public class MainActivity extends SherlockFragmentActivity implements OnBackStac
 		
 		int numAccounts = AccountsManager.getInstance(getApplicationContext()).getAccountCount();
 		if (numAccounts == 0) {
-			showSetup();
+			finish();
+			startActivity(new Intent(getApplicationContext(), SetupActivity.class));
+			return;
 		}
 		
-		setContentView(R.layout.main);
-		getSupportFragmentManager().addOnBackStackChangedListener(this);
-		onBackStackChanged();
+		mFrag = new MainPhoneFragment();
+		mFrag.setArguments(getIntent().getExtras());
+		
+		getSupportFragmentManager().beginTransaction()
+			.add(android.R.id.content, mFrag)
+			.commit();
 		
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		
-		handleIntent(getIntent());
 		
 		SyncManager.validateSync(getApplicationContext());
 	}
 	
-	private void handleIntent(Intent intent) {
-		showRootFragment(new MainPhoneFragment(), false);
-		if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEND)) {
-			Uri uri = (Uri) intent.getExtras().get(Intent.EXTRA_STREAM);
-			Cursor cursor = Media.query(getContentResolver(), uri, null);
-			cursor.moveToFirst();
-			String path = cursor.getString(cursor.getColumnIndex(Media.DATA));
-			showFragment(new ComposeFragment(new ComposeConfig(ComposeMode.STATUS_UPDATE, path)), false);
-		} else if (intent.hasExtra(EXTRA_COLUMN)) {
-			Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragmentHolder);
-			if (frag instanceof MainPhoneFragment) {
-				((MainPhoneFragment) frag).setColumn(getApplicationContext(), intent.getStringExtra(EXTRA_COLUMN));
-			}
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);
+		if (intent.hasExtra(EXTRA_COLUMN)) {
+			mFrag.setColumn(getApplicationContext(), intent.getStringExtra(EXTRA_COLUMN));
 		}
 	}
 	
-	@Override
-	protected void onSaveInstanceState(Bundle pOutState) {
-	}
-	
-	@Override
-	protected void onRestoreInstanceState(Bundle pSavedInstanceState) {
-	}
+	/*if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEND)) {
+		Uri uri = (Uri) intent.getExtras().get(Intent.EXTRA_STREAM);
+		Cursor cursor = Media.query(getContentResolver(), uri, null);
+		cursor.moveToFirst();
+		String path = cursor.getString(cursor.getColumnIndex(Media.DATA));
+		showFragment(new ComposeFragment(new ComposeConfig(ComposeMode.STATUS_UPDATE, path)), false);
+	}*/
 	
 	@Override
 	protected void onStart() {
@@ -109,20 +104,23 @@ public class MainActivity extends SherlockFragmentActivity implements OnBackStac
 		
 		ColumnManager.getInstance(getApplicationContext()).setInForeground(true);
 		AccountsManager.getInstance(getApplicationContext()).setAvailable(true);
-		
-		isStarted = true;
 	}
 	
 	@Override
 	protected void onStop() {
 		super.onStop();
-		isStarted = false;
 		ColumnManager.getInstance(this).setInForeground(false);
 		AccountsManager.getInstance(getApplicationContext()).setAvailable(false);
 		if (mPrefs.getBoolean("clearCacheWhenPause", false)) {
 			Globals.cleanup(getApplicationContext(), true);
 		}
 		ImageManager.getInstance(getApplicationContext()).flush();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		StorageManager.getDeflaut(getApplicationContext()).flushAsync(500);
 	}
 	
 	@Override
@@ -147,40 +145,9 @@ public class MainActivity extends SherlockFragmentActivity implements OnBackStac
 		}
 	}
 	
-	public void showSetup() {
-		finish();
-		startActivity(new Intent(getApplicationContext(), SetupActivity.class));
-	}
-	
-	public void showSettings() {
-		startActivity(new Intent(getApplicationContext(), PrefsActivity.class));
-	}
-	
-	public void showFragment(Fragment fragment) {
-		showFragment(fragment, true);
-	}
-	
-	public void showFragment(Fragment fragment, boolean animate) {
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		ft.replace(R.id.fragmentHolder, fragment);
-		ft.addToBackStack(null);
-		ft.setTransition(animate ? FragmentTransaction.TRANSIT_FRAGMENT_OPEN : FragmentTransaction.TRANSIT_NONE);
-		ft.commitAllowingStateLoss();
-		getSupportFragmentManager().executePendingTransactions();
-	}
-	
-	public void showRootFragment(Fragment fragment, boolean animate) {
-		getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-		
-		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		ft.replace(R.id.fragmentHolder, fragment);
-		ft.setTransition(animate ? FragmentTransaction.TRANSIT_FRAGMENT_OPEN : FragmentTransaction.TRANSIT_NONE);
-		ft.commitAllowingStateLoss();
-	}
-	
 	@Override
-	public void onBackStackChanged() {
-		int flags = getSupportFragmentManager().getBackStackEntryCount() > 0 ? ActionBar.DISPLAY_HOME_AS_UP : 0;
-		getSupportActionBar().setDisplayOptions(flags, ActionBar.DISPLAY_HOME_AS_UP);
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	}
 }
