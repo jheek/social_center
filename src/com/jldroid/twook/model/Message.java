@@ -200,14 +200,19 @@ public final class Message implements Comparable<Message> {
 			for (int i = 0; i < recipients.length; i++) {
 				if (recipients[i].id != account.getUser().id) {
 					if (count + 1 == MAX_RECIPIENTS) {
+						sSB.append(' ');
 						sSB.append(c.getString(R.string.summation_last));
+						sSB.append(' ');
 					} else if (count != 0) {
 						sSB.append(c.getString(R.string.summation));
+						sSB.append(' ');
 					}
 					sSB.append(recipients[i].name);
 					count++;
 					if (count + 1 == MAX_RECIPIENTS && recipients.length - i > 2) {
-						sSB.append(" and ");
+						sSB.append(' ');
+						sSB.append(c.getString(R.string.summation_last));
+						sSB.append(' ');
 						int numOthers = 0;
 						for (int i2 = i + 1; i2 < recipients.length; i2++) {
 							if (recipients[i2].id != account.getUser().id) {

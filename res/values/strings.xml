@@ -10,8 +10,8 @@
     <string name="error_check_network">Error please check your network connection.</string>
     <string name="failed_update">Failed to update.</string>
     
-    <string name="summation">, </string>
-    <string name="summation_last"> and </string>
+    <string name="summation">,</string>
+    <string name="summation_last">and</string>
     <string name="summation_other">1 other</string>
     <string name="summation_others">%d others</string>
     

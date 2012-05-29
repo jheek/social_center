@@ -10,7 +10,7 @@ public class ChatActivity extends SherlockFragmentActivity {
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
-		if (arg0 != null) {
+		if (arg0 == null) {
 			ChatFragment frag = new ChatFragment();
 			frag.setArguments(getIntent().getExtras());
 			getSupportFragmentManager().beginTransaction()

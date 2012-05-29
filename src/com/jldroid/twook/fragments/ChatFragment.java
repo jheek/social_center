@@ -48,6 +48,7 @@ public class ChatFragment extends SherlockFragment implements OnClickListener, C
 	private EditText mMessageET;
 	private ImageView mSendMsgBtn;
 	
+	protected Message mMsg;
 	protected Chat mChat;
 	
 	protected MyAdapter mAdapter;
@@ -57,13 +58,12 @@ public class ChatFragment extends SherlockFragment implements OnClickListener, C
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Message msg = Message.findMessage(getActivity(), getArguments().getBundle(EXTRA_CHAT_MSG));
-		if (msg != null) {
-			mChat = msg.getChat();
+		mMsg = Message.findMessage(getActivity(), getArguments().getBundle(EXTRA_CHAT_MSG));
+		if (mMsg != null) {
+			mChat = mMsg.getChat();
 		}
 		if (mChat == null) {
-			getActivity().onBackPressed();
-			// TODO handle this someway...
+			getActivity().finish();
 		}
 	}
 	
@@ -141,35 +141,7 @@ public class ChatFragment extends SherlockFragment implements OnClickListener, C
 	@Override
 	public void onStart() {
 		super.onStart();
-		
-		ArrayList<User> recipients = mChat.getParticipants();
-		StringBuilder sb = new StringBuilder();
-		int count = 0;
-		for (int i = 0; i < recipients.size(); i++) {
-			if (recipients.get(i).id != mChat.getAccount().getUser().id) {
-				if (count + 1 == MAX_RECIPIENTS) {
-					sb.append(getString(R.string.summation_last));
-				} else if (count != 0) {
-					sb.append(getString(R.string.summation));
-				}
-				sb.append(recipients.get(i).name);
-				count++;
-				if (count + 1 == MAX_RECIPIENTS && recipients.size() - i > 2) {
-					sb.append(getString(R.string.summation_last));
-					int numOthers = 0;
-					for (int i2 = i + 1; i2 < recipients.size(); i2++) {
-						if (recipients.get(i2).id != mChat.getAccount().getUser().id) {
-							numOthers++;
-						}
-					}
-					sb.append(getString(R.string.summation_others, numOthers));
-					break;
-				} else if (count == MAX_RECIPIENTS) {
-					break;
-				}
-			}
-		}
-		getSherlockActivity().getSupportActionBar().setTitle(sb.toString());
+		getSherlockActivity().getSupportActionBar().setTitle(mMsg.getTitle(getActivity()));
 		mChat.addListener(this);
 		mChat.setInForeground(true);
 		ChatUtils.updateChatNotification(getActivity().getApplicationContext(), mChat);
