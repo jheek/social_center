@@ -37,6 +37,8 @@ public class ColumnsActivity extends SherlockPreferenceActivity implements OnCol
 		ThemeUtils.setupActivityTheme(this);
 		super.onCreate(pSavedInstanceState);
 		
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		addPreferencesFromResource(R.xml.columns);
 		
 		AccountsManager am = AccountsManager.getInstance(getApplicationContext());

@@ -32,6 +32,9 @@ public class ColumnPrefsActivity extends SherlockPreferenceActivity implements O
 	protected void onCreate(Bundle pSavedInstanceState) {
 		ThemeUtils.setupActivityTheme(this);
 		super.onCreate(pSavedInstanceState);
+		
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		addPreferencesFromResource(R.xml.column_prefs);
 		
 		mInfo = ColumnManager.getInstance(this).getColumnInfo(getIntent().getIntExtra(EXTRA_COLUMN_INDEX, -1));

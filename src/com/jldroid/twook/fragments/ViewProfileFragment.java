@@ -303,6 +303,9 @@ public class ViewProfileFragment extends SherlockFragment implements OnPageChang
 				Threads.runOnUIThread(new Runnable() {
 					@Override
 					public void run() {
+						if (getActivity() == null) {
+							return;
+						}
 						if (user != null) {
 							mUser = user;
 							mInfoScrollView.setVisibility(View.VISIBLE);

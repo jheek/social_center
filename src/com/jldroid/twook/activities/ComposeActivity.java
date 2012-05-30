@@ -10,6 +10,7 @@ public class ComposeActivity extends SherlockFragmentActivity {
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		if (arg0 != null) {
 			ComposeFragment frag = new ComposeFragment();
 			frag.setArguments(getIntent().getExtras());

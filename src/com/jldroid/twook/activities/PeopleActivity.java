@@ -10,7 +10,8 @@ public class PeopleActivity extends SherlockFragmentActivity {
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
-		if (arg0 != null) {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		if (arg0 == null) {
 			PeopleFragment frag = new PeopleFragment();
 			frag.setArguments(getIntent().getExtras());
 			getSupportFragmentManager().beginTransaction()

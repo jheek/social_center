@@ -27,6 +27,8 @@ public class PrefsActivity extends SherlockPreferenceActivity {
 		ThemeUtils.setupActivityTheme(this);
 		super.onCreate(pSavedInstanceState);
 		
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		addPreferencesFromResource(R.xml.prefs);
 		findPreference("columns").setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			@Override

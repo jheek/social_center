@@ -13,6 +13,7 @@ public class DetailsActivity extends SherlockFragmentActivity {
 	@Override
 	protected void onCreate(Bundle pArg0) {
 		super.onCreate(pArg0);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		if (pArg0 == null) {
 			DetailsFragment frag = new DetailsFragment();
 			frag.setArguments(getIntent().getExtras());

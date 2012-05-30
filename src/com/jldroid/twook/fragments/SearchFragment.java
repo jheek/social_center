@@ -148,15 +148,17 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 		for (int i = 0; i < TABS.length; i++) {
 			getSherlockActivity().getSupportActionBar().addTab(getSherlockActivity().getSupportActionBar().newTab().setText(TABS[i]).setTabListener(this));
 		}
-		switch (getArguments().getInt(EXTRA_TYPE, TYPE_UNKNOWN)) {
-		case TYPE_PEOPLE:
-			getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);
-			break;
-		case TYPE_MESSAGES:
-		case TYPE_UNKNOWN:
-			getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(0);
-		default:
-			break;
+		if (getArguments() != null) {
+			switch (getArguments().getInt(EXTRA_TYPE, TYPE_UNKNOWN)) {
+			case TYPE_PEOPLE:
+				getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(1);
+				break;
+			case TYPE_MESSAGES:
+			case TYPE_UNKNOWN:
+				getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(0);
+			default:
+				break;
+			}
 		}
 		getSherlockActivity().getSupportActionBar().setCustomView(mSearchView);
 		getSherlockActivity().getSupportActionBar().setDisplayShowCustomEnabled(true);
@@ -164,7 +166,7 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 		
 		setHasOptionsMenu(true);
 		
-		String q = getArguments().getString(EXTRA_QUERY);
+		String q = getArguments() != null ? getArguments().getString(EXTRA_QUERY) : null;
 		if (q != null) {
 			mSearchView.setText(q);
 		}

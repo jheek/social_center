@@ -66,6 +66,17 @@
         <activity
             android:name=".activities.ChatActivity" >
         </activity>
+        <activity
+            android:name=".activities.PeopleActivity" >
+        </activity>
+        
+        <activity
+            android:name=".activities.DonateActivity" >
+        </activity>
+        
+        <activity
+            android:name=".activities.SearchActivity" >
+        </activity>
         
         <activity
             android:name=".activities.ViewProfileActivity" >
