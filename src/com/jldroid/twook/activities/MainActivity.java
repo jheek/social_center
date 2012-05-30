@@ -115,12 +115,7 @@ public class MainActivity extends SherlockFragmentActivity {
 			Globals.cleanup(getApplicationContext(), true);
 		}
 		ImageManager.getInstance(getApplicationContext()).flush();
-	}
-	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		StorageManager.getDeflaut(getApplicationContext()).flushAsync(500);
+		StorageManager.getDeflaut(getApplicationContext()).flushAsync();
 	}
 	
 	@Override
