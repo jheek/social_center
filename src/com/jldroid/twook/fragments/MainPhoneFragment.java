@@ -180,7 +180,7 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 		}
 		onColumnsChanged();
 		
-		if (mViewPager.getCurrentItem() != -1 && mViewPager.getCurrentItem() < mCM.getEnabledColumnCount()) {
+		if (mViewPager.getCurrentItem() >= 0 && mViewPager.getCurrentItem() < mCM.getEnabledColumnCount()) {
 			ColumnMessagesProvider provider = mCM.getEnabledColumnInfo(mViewPager.getCurrentItem()).getProvider();
 			checkIsUpdating(provider);
 			checkUpdate(provider);
