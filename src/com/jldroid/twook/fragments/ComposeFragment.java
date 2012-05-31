@@ -66,7 +66,8 @@ public class ComposeFragment extends SherlockFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mConfig = new ComposeConfig(getArguments().getBundle(EXTRA_CONFIG));
+		Bundle bundle = getArguments() != null ? getArguments().getBundle(EXTRA_CONFIG) : null;
+		mConfig = bundle != null ? new ComposeConfig(getArguments().getBundle(EXTRA_CONFIG)) : new ComposeConfig(ComposeMode.STATUS_UPDATE);
 	}
 	
 	@Override

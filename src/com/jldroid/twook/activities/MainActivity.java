@@ -119,15 +119,6 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem pItem) {
-		if (pItem.getItemId() == android.R.id.home) {
-			getSupportFragmentManager().popBackStack();
-			return true;
-		}
-		return super.onOptionsItemSelected(pItem);
-	}
-	
-	@Override
 	protected void onActivityResult(int pRequestCode, int pResultCode, Intent pData) {
 		switch (pRequestCode) {
 		case REQUEST_CODE_COMPOSE_PICK_IMAGE:

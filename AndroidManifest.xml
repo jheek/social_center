@@ -84,6 +84,9 @@
         <activity
             android:name=".activities.AlbumActivity">
         </activity>
+        <activity
+            android:name=".activities.ComposeActivity">
+        </activity>
 
         <service
             android:name="SyncService"
