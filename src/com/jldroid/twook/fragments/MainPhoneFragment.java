@@ -99,6 +99,11 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 		pMenu.add(Menu.NONE, 3, Menu.NONE, R.string.settings);
 		pMenu.add(Menu.NONE, 4, Menu.NONE, R.string.setup); // TODO remove
 		pMenu.add(Menu.NONE, 5, Menu.NONE, R.string.donate);
+
+		if (mViewPager.getCurrentItem() >= 0 && mViewPager.getCurrentItem() < mCM.getEnabledColumnCount()) {
+			ColumnMessagesProvider provider = mCM.getEnabledColumnInfo(mViewPager.getCurrentItem()).getProvider();
+			checkIsUpdating(provider);
+		}
 	}
 	
 	@Override
@@ -249,6 +254,9 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
     }
     
     private void checkIsUpdating(ColumnMessagesProvider provider) {
+    	if (mRefreshItem == null) {
+    		return;
+    	}
     	if (provider.isUpdating()) {
 			mRefreshItem.setActionView(R.layout.ab_progressbar);
 			mRefreshItem.expandActionView();
