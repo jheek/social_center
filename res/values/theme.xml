@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
@@ -27,4 +28,33 @@
         <item name="menuBackground">#454545</item>
     </style>
 
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CustomTheme.Light" parent="Theme.Sherlock.Light.DarkActionBar.ForceOverflow">
+        <item name="android:listViewStyle">@style/ListView.Light</item>
+        <item name="android:buttonStyle">@style/Button.Light</item>
+        <item name="android:spinnerStyle">@style/Spinner.Light</item>
+        <item name="android:editTextStyle">@style/EditText.Light</item>
+        
+        <item name="MessageViewStyle">@style/MessageView.Light</item>
+        <item name="ViewPagerTabsStyle">@style/ViewPagerTabs.Light</item>
+        <item name="DetailsViewStyle">@style/DetailsView.Light</item>
+        
+        <item name="menuBackground">#454545</item>
+    </style>
+
+    <style name="CustomTheme.Dark" parent="android:Theme.Black.NoTitleBar">
+        <item name="android:listViewStyle">@style/ListView.Dark</item>
+        <item name="android:buttonStyle">@style/Button.Dark</item>
+        <item name="android:spinnerStyle">@style/Spinner.Dark</item>
+        <item name="android:editTextStyle">@style/EditText.Dark</item>
+        <item name="MessageViewStyle">@style/MessageView.Dark</item>
+        <item name="ViewPagerTabsStyle">@style/ViewPagerTabs.Dark</item>
+        <item name="DetailsViewStyle">@style/DetailsView.Dark</item>
+        <item name="menuBackground">#454545</item>
+    </style>
+
+>>>>>>> force overflow for <4.0 devices
 </resources>
