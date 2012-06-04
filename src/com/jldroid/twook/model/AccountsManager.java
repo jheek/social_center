@@ -95,7 +95,10 @@ public class AccountsManager {
 	public static void viewProfile(Context c, IAccount account, User user) {
 		c.startActivity(new Intent(c, ViewProfileActivity.class)
 			.putExtra(ViewProfileFragment.EXTRA_ACCOUNT, account.getUser().id)
-			.putExtra(ViewProfileFragment.EXTRA_USER, user.id));
+			.putExtra(ViewProfileFragment.EXTRA_USER_ID, user.id)
+			.putExtra(ViewProfileFragment.EXTRA_USER_NAME, user.name)
+			.putExtra(ViewProfileFragment.EXTRA_USER_PIC, user.profilePictureUrl)
+			.putExtra(ViewProfileFragment.EXTRA_USER_PIC_LARGE, user.largeProfilePictureUrl));
 	}
 	
 	public User findUser(int type, long id) {

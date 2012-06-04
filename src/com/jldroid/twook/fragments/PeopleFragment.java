@@ -21,6 +21,7 @@ import com.jdroid.utils.Threads;
 import com.jldroid.twook.R;
 import com.jldroid.twook.activities.MainActivity;
 import com.jldroid.twook.activities.ViewProfileActivity;
+import com.jldroid.twook.model.AccountsManager;
 import com.jldroid.twook.model.IAccount;
 import com.jldroid.twook.model.INetworkCallback;
 import com.jldroid.twook.model.User;
@@ -62,9 +63,7 @@ public class PeopleFragment extends SherlockFragment {
 			public void onItemClick(AdapterView<?> pParent, View pView, int pPosition, long pId) {
 				Object item = mAdapter.getItem(pPosition);
 				if (item instanceof User) {
-					getActivity().startActivity(new Intent(getSherlockActivity().getApplicationContext(), ViewProfileActivity.class)
-						.putExtra(ViewProfileFragment.EXTRA_ACCOUNT, mAccount.getUser().id)
-						.putExtra(ViewProfileFragment.EXTRA_USER, ((User) item).id));
+					AccountsManager.viewProfile(getActivity(), mAccount, (User) item);
 				}
 			}
 		});

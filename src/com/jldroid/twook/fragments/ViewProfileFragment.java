@@ -48,7 +48,10 @@ import com.jldroid.twook.view.UnderlineDrawable;
 public class ViewProfileFragment extends SherlockFragment implements OnPageChangeListener, OnClickListener, TabListener {
 	
 	public static final String EXTRA_ACCOUNT = "com.jldroid.twook.ACCOUNT";
-	public static final String EXTRA_USER = "com.jldroid.twook.USER";
+	public static final String EXTRA_USER_ID = "com.jldroid.twook.USER_ID";
+	public static final String EXTRA_USER_NAME = "com.jldroid.twook.USER_NAME";
+	public static final String EXTRA_USER_PIC = "com.jldroid.twook.USER_PIC";
+	public static final String EXTRA_USER_PIC_LARGE = "com.jldroid.twook.USER_PIC_LARGE";
 	
 	private static final int[] TABS_FACEBOOK = {R.string.tab_info, R.string.tab_updates, R.string.tab_pictures};
 	private static final int[] TABS_TWITTER = {R.string.tab_info, R.string.tab_timeline};
@@ -85,7 +88,12 @@ public class ViewProfileFragment extends SherlockFragment implements OnPageChang
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mAccount = AccountsManager.getInstance(getActivity()).findAccount(getArguments().getLong(EXTRA_ACCOUNT));
-		mUser = mAccount.findUser(getArguments().getLong(EXTRA_USER));
+		mUser = mAccount.findUser(getArguments().getLong(EXTRA_USER_ID));
+		if (mUser == null) {
+			mUser = new User(mAccount instanceof FacebookAccount ? User.TYPE_FACEBOOK : User.TYPE_TWITTER, getArguments().getLong(EXTRA_USER_ID), getArguments().getString(EXTRA_USER_NAME));
+			mUser.profilePictureUrl = getArguments().getString(EXTRA_USER_PIC);
+			mUser.largeProfilePictureUrl = getArguments().getString(EXTRA_USER_PIC_LARGE);
+		}
 		mTabs = mAccount instanceof FacebookAccount ? TABS_FACEBOOK : TABS_TWITTER;
 	}
 	

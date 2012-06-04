@@ -171,6 +171,14 @@ public class DetailsFragment extends SherlockFragment {
 				mHeader.addView(mAttachmentsHolder, 0);
 			}
 		}
+		
+		mProfileIV.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				AccountsManager.viewProfile(getActivity(), mMessage.account, mMessage.sender);
+			}
+		});
+		
 		mSendCommentBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View pV) {
@@ -400,9 +408,7 @@ public class DetailsFragment extends SherlockFragment {
 									builder.setAdapter(new UserAdapter(getActivity(), likes), new DialogInterface.OnClickListener() {
 										@Override
 										public void onClick(DialogInterface pDialog, int pWhich) {
-											getActivity().startActivity(new Intent(getSherlockActivity().getApplicationContext(), ViewProfileActivity.class)
-											.putExtra(ViewProfileFragment.EXTRA_ACCOUNT, mMessage.account.getUser().id)
-											.putExtra(ViewProfileFragment.EXTRA_USER, likes[pWhich].id));
+											AccountsManager.viewProfile(getActivity(), mMessage.account, likes[pWhich]);
 										}
 									});
 								} else {
