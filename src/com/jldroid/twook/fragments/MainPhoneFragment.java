@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -66,7 +68,8 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 	public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, Bundle pSavedInstanceState) {
 		View v = pInflater.inflate(R.layout.main_phone, null);
 		mViewPager = (ViewPager) v.findViewById(R.id.viewpager);
-		
+		mViewPager.setPageMargin(10);
+		mViewPager.setPageMarginDrawable(new ColorDrawable(Color.BLACK));
 		return v;
 	}
 	
@@ -82,6 +85,11 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
     	mViewPager.setAdapter(mAdapter);
     	
         mViewPager.setOnPageChangeListener(this);
+        
+        ActionBar ab = getSherlockActivity().getSupportActionBar();
+		ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		ab.setDisplayShowTitleEnabled(false);
+		ab.setDisplayShowHomeEnabled(false);
         
         if (getArguments() != null && getArguments().containsKey(MainActivity.EXTRA_COLUMN)) {
 			setColumn(getActivity(), getArguments().getString(MainActivity.EXTRA_COLUMN));
@@ -168,7 +176,7 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 		for (int i = 0; i < mCM.getEnabledColumnCount(); i++) {
         	ColumnInfo info = mCM.getEnabledColumnInfo(i);
         	if (info.getProvider().getStorageName().equals(storageName)) {
-        		mViewPager.setCurrentItem(i);
+        		mViewPager.setCurrentItem(i, false);
         		break;
         	}
         }
@@ -183,17 +191,23 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 			cv.getProvider().addListener(this);
 			cv.onStart();
 		}
+		int cItem = mViewPager.getCurrentItem();
+		String previousSelected = cItem >= 0 && cItem < mCM.getEnabledColumnCount() ? mCM.getEnabledColumnInfo(cItem).getProvider().getStorageName() : null;
 		onColumnsChanged();
+		setColumn(getActivity(), previousSelected);
 		
-		if (mViewPager.getCurrentItem() >= 0 && mViewPager.getCurrentItem() < mCM.getEnabledColumnCount()) {
-			ColumnMessagesProvider provider = mCM.getEnabledColumnInfo(mViewPager.getCurrentItem()).getProvider();
+		cItem = mViewPager.getCurrentItem();
+		if (cItem >= 0 && cItem < mCM.getEnabledColumnCount()) {
+			ColumnMessagesProvider provider = mCM.getEnabledColumnInfo(cItem).getProvider();
 			checkIsUpdating(provider);
 			checkUpdate(provider);
 		}
 		
-		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		getSherlockActivity().getSupportActionBar().setDisplayShowTitleEnabled(false);
-		getSherlockActivity().getSupportActionBar().setDisplayShowHomeEnabled(false);
+		ActionBar ab = getSherlockActivity().getSupportActionBar();
+		if (ab.getSelectedNavigationIndex() != cItem) {
+			ab.setSelectedNavigationItem(cItem);
+		}
+		
 	}
 	
 	@Override
@@ -205,10 +219,6 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 			cv.getProvider().removeListener(this);
 			cv.onStop();
 		}
-		
-		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		getSherlockActivity().getSupportActionBar().setDisplayShowTitleEnabled(true);
-		getSherlockActivity().getSupportActionBar().setDisplayShowHomeEnabled(true);
 	}
 	
 	@Override
