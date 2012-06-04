@@ -9,6 +9,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.graphics.Paint.Align;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
@@ -131,8 +139,6 @@ public class DetailsFragment extends SherlockFragment {
 		mProfileIV.setBackgroundDrawable(mProfileDrawable);
 		
 		TypedArray a = getActivity().obtainStyledAttributes(null, R.styleable.DetailsView, R.attr.DetailsViewStyle, 0);
-		/*mLikesBtn.setBackgroundDrawable(a.getDrawable(R.styleable.DetailsView_likesBackground));
-		mLikesBtn.setTextColor(a.getColor(R.styleable.DetailsView_likesTextColor, -1));*/
 		if (VERSION.SDK_INT < 11) {
 			Drawable commentsBG = a.getDrawable(R.styleable.DetailsView_commentsBackground);
 			if (commentsBG != null) {
@@ -261,7 +267,7 @@ public class DetailsFragment extends SherlockFragment {
 		if (mMessage.isFacebook()) {
 			mRefreshItem = pMenu.add(Menu.NONE, 2, Menu.NONE, R.string.refresh).setIcon(R.drawable.actionbar_refresh).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
 			mLikeItem = pMenu.add(Menu.NONE, 3, Menu.NONE, R.string.like).setIcon(mMessage.userLikes ? R.drawable.details_dislike : R.drawable.details_like).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
-			mLikesItem = pMenu.add(Menu.NONE, 4, Menu.NONE, R.string.likes).setIcon(R.drawable.details_like).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS|MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+			mLikesItem = pMenu.add(Menu.NONE, 4, Menu.NONE, R.string.likes).setIcon(new LikesDrawable()).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
 			pMenu.add(Menu.NONE, 5, Menu.NONE, R.string.comment).setIcon(R.drawable.details_reply).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		} else {
 			pMenu.add(Menu.NONE, 6, Menu.NONE, R.string.retweet).setIcon(R.drawable.details_retweet).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -450,9 +456,8 @@ public class DetailsFragment extends SherlockFragment {
 	}
 	
 	protected void updateLikes() {
-		int likes = mMessage.numLikes;
 		if (mLikesItem != null) {
-			mLikesItem.setTitle(String.valueOf(likes));
+			mLikesItem.getIcon().invalidateSelf();
 		}
 	}
 	
@@ -517,6 +522,72 @@ public class DetailsFragment extends SherlockFragment {
 		}
 	}
 	
+	private class LikesDrawable extends Drawable {
+
+		private Drawable mLikesIcon;
+		
+		private int mNumLikes = -1;
+		private String mLikesString;
+		
+		private Paint mTextPaint = new Paint();
+		
+		public LikesDrawable() {
+			mLikesIcon = getResources().getDrawable(R.drawable.details_like);
+			mTextPaint.setColor(Color.BLACK);
+			mTextPaint.setTextAlign(Align.CENTER);
+			mTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
+			mTextPaint.setTextSize(15 * getResources().getDisplayMetrics().density);
+		}
+		
+		@Override
+		public void draw(Canvas canvas) {
+			mLikesIcon.draw(canvas);
+			Rect bounds = getBounds();
+			if (mNumLikes != mMessage.numLikes) {
+				mNumLikes = mMessage.numLikes;
+				mLikesString = String.valueOf(mNumLikes);
+			}
+			canvas.drawText(mLikesString, bounds.width() / 2, bounds.bottom - (bounds.height() - mTextPaint.getTextSize()) / 2, mTextPaint);
+		}
+
+		@Override
+		public void setAlpha(int alpha) {
+			mLikesIcon.setAlpha(alpha);
+		}
+
+		@Override
+		public void setColorFilter(ColorFilter cf) {
+			mLikesIcon.setColorFilter(cf);
+		}
+		
+		@Override
+		public boolean setState(int[] stateSet) {
+			return super.setState(stateSet) | mLikesIcon.setState(stateSet);
+		}
+		
+		@Override
+		public void setBounds(int left, int top, int right, int bottom) {
+			super.setBounds(left, top, right, bottom);
+			mLikesIcon.setBounds(left, top, right, bottom);
+		}
+		
+		@Override
+		public int getIntrinsicWidth() {
+			return mLikesIcon.getIntrinsicWidth();
+		}
+		
+		@Override
+		public int getIntrinsicHeight() {
+			return mLikesIcon.getIntrinsicHeight();
+		}
+
+		@Override
+		public int getOpacity() {
+			return PixelFormat.TRANSLUCENT;
+		}
+		
+	}
+ 	
 	private class MyAdapter extends BaseAdapter {
 
 		@Override
