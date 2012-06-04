@@ -68,7 +68,7 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 	public View onCreateView(LayoutInflater pInflater, ViewGroup pContainer, Bundle pSavedInstanceState) {
 		View v = pInflater.inflate(R.layout.main_phone, null);
 		mViewPager = (ViewPager) v.findViewById(R.id.viewpager);
-		mViewPager.setPageMargin(10);
+		mViewPager.setPageMargin((int) (getResources().getDisplayMetrics().density * 5));
 		mViewPager.setPageMarginDrawable(new ColorDrawable(Color.BLACK));
 		return v;
 	}
