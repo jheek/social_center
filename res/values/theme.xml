@@ -11,7 +11,9 @@
         <item name="ViewPagerTabsStyle">@style/ViewPagerTabs.Light</item>
         <item name="DetailsViewStyle">@style/DetailsView.Light</item>
         
-        <item name="menuBackground">#454545</item>
+      
+        
+        <item name="menuBackground">#212121</item>
     </style>
 
     <style name="CustomTheme.Dark" parent="android:Theme.Black.NoTitleBar">
