@@ -197,9 +197,6 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 	@Override
 	public void onStop() {
 		super.onStop();
-		getSherlockActivity().getSupportActionBar().setCustomView(null);
-		getSherlockActivity().getSupportActionBar().setDisplayShowCustomEnabled(false);
-		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		mMessagesColumnView.onStop();
 	}
 	
