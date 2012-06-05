@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -69,7 +71,9 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 		View v = pInflater.inflate(R.layout.main_phone, null);
 		mViewPager = (ViewPager) v.findViewById(R.id.viewpager);
 		mViewPager.setPageMargin((int) (getResources().getDisplayMetrics().density * 5));
-		mViewPager.setPageMarginDrawable(new ColorDrawable(Color.BLACK));
+		ShapeDrawable marginDrawable = new ShapeDrawable();
+		marginDrawable.getPaint().setColor(Color.BLACK);
+		mViewPager.setPageMarginDrawable(marginDrawable);
 		return v;
 	}
 	
@@ -245,7 +249,9 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
     @Override
 	public void onPageSelected(int pArg0) {
     	ColumnMessagesProvider provider = mCM.getEnabledColumnInfo(pArg0).getProvider();
-    	getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(pArg0);
+    	if (pArg0 < getSherlockActivity().getSupportActionBar().getNavigationItemCount()) {
+    		getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(pArg0);
+    	}
     	checkIsUpdating(provider);
     	checkUpdate(provider);
 	}
