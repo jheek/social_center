@@ -45,10 +45,6 @@ import com.jdroid.utils.StorageManager;
 public class MainActivity extends SherlockFragmentActivity {
 	
 	public static final String EXTRA_COLUMN = "com.jldroid.twook.COLUMN";
-	public static final String EXTRA_MESSAGE_ID = "com.jldroid.twook.ID";
-	public static final String EXTRA_MESSAGE_TYPE = "com.jldroid.twook.TYPE";
-	public static final String EXTRA_ACCOUNT = "com.jldroid.twook.ACCOUNT";
-	public static final String EXTRA_CHAT = "com.jldroid.twook.CHAT";
 	
 	private SharedPreferences mPrefs;
 	
