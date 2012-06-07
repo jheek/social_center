@@ -7,26 +7,24 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
+import com.jdroid.utils.StorageManager;
 import com.jldroid.twook.R;
-import com.jldroid.twook.activities.MainActivity;
+import com.jldroid.twook.activities.DetailsActivity;
+import com.jldroid.twook.fragments.DetailsFragment;
 import com.jldroid.twook.model.ColumnInfo;
 import com.jldroid.twook.model.ColumnManager;
 import com.jldroid.twook.model.ColumnMessagesProvider;
-import com.jldroid.twook.model.ColumnProviderListener;
-import com.jdroid.utils.StorageManager;
 
 public class ColumnWidgetProvider extends AppWidgetProvider {
 	
     public static final String CLICK_ACTION = "com.jldroid.twook.TOAST_ACTION";
     public static final String REFRESH_ACTION = "com.jldroid.twook.REFRESH_ACTION";
     
-    public static final String EXTRA_MESSAGE_TYPE = "com.jldroid.twook.EXTRA_TYPE";
-    public static final String EXTRA_MESSAGE_ID = "com.jldroid.twook.EXTRA_ID";
+    public static final String EXTRA_MSG = "com.jldroid.twook.EXTRA_MSG";
 
     public static ColumnInfo getWidgetColumn(Context c, int appWidgetId) {
     	ColumnManager cm = ColumnManager.getInstance(c);
@@ -57,17 +55,10 @@ public class ColumnWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        AppWidgetManager mgr = AppWidgetManager.getInstance(context);
         if (intent.getAction().equals(CLICK_ACTION)) {
-            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            ColumnInfo column = getWidgetColumn(context, appWidgetId);
-            int msgType = intent.getIntExtra(EXTRA_MESSAGE_TYPE, -1);
-            long msgID = intent.getLongExtra(EXTRA_MESSAGE_ID, -1);
-            context.startActivity(new Intent(context.getApplicationContext(), MainActivity.class)
-            		.setAction(Intent.ACTION_MAIN)
-            		.putExtra(MainActivity.EXTRA_COLUMN, column.getProvider().getStorageName())
-            		.putExtra(MainActivity.EXTRA_MESSAGE_TYPE, msgType)
-            		.putExtra(MainActivity.EXTRA_MESSAGE_ID, msgID)
+            Bundle msg = intent.getBundleExtra(EXTRA_MSG);
+            context.startActivity(new Intent(context.getApplicationContext(), DetailsActivity.class)
+            		.putExtra(DetailsFragment.EXTRA_MSG, msg)
             		.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         } else if (intent.getAction().equals(REFRESH_ACTION)) {
         	int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);

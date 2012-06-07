@@ -142,8 +142,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, 
         rv.setTextViewText(R.id.contentTV, msg.getBody());
         
         Intent fillInIntent = new Intent();
-        fillInIntent.putExtra(ColumnWidgetProvider.EXTRA_MESSAGE_TYPE, msg.type);
-        fillInIntent.putExtra(ColumnWidgetProvider.EXTRA_MESSAGE_ID, msg.ID);
+        fillInIntent.putExtra(ColumnWidgetProvider.EXTRA_MSG, Message.createMessageBundle(null, msg));
         rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
         return rv;
     }
