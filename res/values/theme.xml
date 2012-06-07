@@ -10,10 +10,11 @@
         <item name="MessageViewStyle">@style/MessageView.Light</item>
         <item name="ViewPagerTabsStyle">@style/ViewPagerTabs.Light</item>
         <item name="DetailsViewStyle">@style/DetailsView.Light</item>
-        
         <item name="menuBackground">#212121</item>
-        
         <item name="absForceOverflow">true</item>
+    <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
+    <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
+
     </style>
 
     <style name="CustomTheme.Dark" parent="android:Theme.Black.NoTitleBar">

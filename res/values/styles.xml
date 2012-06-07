@@ -148,5 +148,15 @@
         <item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>
         <item name="@android:windowExitAnimation">@anim/shrink_from_top</item>
     </style>
+    
+    
+    
+    <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+    <item name="background">@drawable/ab_background</item>
+    <item name="android:background">@drawable/ab_background</item>
+
+    <item name="backgroundSplit">@drawable/ab_background</item>
+    <item name="android:backgroundSplit">@drawable/ab_background</item>
+</style>
 
 </resources>
