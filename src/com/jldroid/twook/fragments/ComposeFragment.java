@@ -68,6 +68,12 @@ public class ComposeFragment extends SherlockFragment {
 		super.onCreate(savedInstanceState);
 		Bundle bundle = getArguments() != null ? getArguments().getBundle(EXTRA_CONFIG) : null;
 		mConfig = bundle != null ? new ComposeConfig(getArguments().getBundle(EXTRA_CONFIG)) : new ComposeConfig(ComposeMode.STATUS_UPDATE);
+		if (getArguments() != null && bundle == null && getArguments().get(Intent.EXTRA_STREAM) instanceof Uri) {
+			Uri uri = (Uri) getArguments().get(Intent.EXTRA_STREAM);
+			Cursor cursor = Media.query(getActivity().getContentResolver(), uri, null);
+			cursor.moveToFirst();
+			mConfig.imgPath = cursor.getString(cursor.getColumnIndex(Media.DATA));
+		}
 	}
 	
 	@Override

@@ -90,14 +90,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 	}
 	
-	/*if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEND)) {
-		Uri uri = (Uri) intent.getExtras().get(Intent.EXTRA_STREAM);
-		Cursor cursor = Media.query(getContentResolver(), uri, null);
-		cursor.moveToFirst();
-		String path = cursor.getString(cursor.getColumnIndex(Media.DATA));
-		showFragment(new ComposeFragment(new ComposeConfig(ComposeMode.STATUS_UPDATE, path)), false);
-	}*/
-	
 	@Override
 	protected void onStart() {
 		super.onStart();
