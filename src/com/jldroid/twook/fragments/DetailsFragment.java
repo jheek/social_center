@@ -142,14 +142,14 @@ public class DetailsFragment extends SherlockFragment {
 		mProfileDrawable = new ProfileImageDrawable(getActivity());
 		mProfileIV.setBackgroundDrawable(mProfileDrawable);
 		
-		TypedArray a = getActivity().obtainStyledAttributes(null, R.styleable.DetailsView, R.attr.DetailsViewStyle, 0);
+		/*TypedArray a = getActivity().obtainStyledAttributes(null, R.styleable.DetailsView, R.attr.DetailsViewStyle, 0);
 		if (VERSION.SDK_INT < 11) {
 			Drawable commentsBG = a.getDrawable(R.styleable.DetailsView_commentsBackground);
 			if (commentsBG != null) {
 				mListView.setSelector(commentsBG);
 			}
 		}
-		a.recycle();
+		a.recycle();*/
 		return v;
 	}
 	
