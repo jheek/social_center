@@ -32,7 +32,6 @@ import com.jdroid.utils.ListUtils;
 import com.jdroid.utils.SortedArrayList;
 import com.jdroid.utils.Threads;
 import com.jldroid.twook.R;
-import com.jldroid.twook.activities.MainActivity;
 import com.jldroid.twook.model.AccountsManager;
 import com.jldroid.twook.model.ColumnProviderListener;
 import com.jldroid.twook.model.IAccount;
@@ -129,7 +128,7 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 			public void onItemClick(AdapterView<?> pParent, View pView, int pPosition, long pId) {
 				AccountsManager am = AccountsManager.getInstance(getSherlockActivity().getApplicationContext());
 				User user = mPeople.get(pPosition);
-				if (!am.viewProfile((MainActivity) getActivity(), user)) {
+				if (!am.viewProfile(getActivity(), user)) {
 					IAccount account = null;
 					if (user.type == User.TYPE_FACEBOOK) {
 						account = am.getFacebookAccount(0);
@@ -137,7 +136,7 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 						account = am.getTwitterAccount(0);
 					}
 					if (account != null)
-						AccountsManager.viewProfile((MainActivity) getActivity(), account, user);
+						AccountsManager.viewProfile(getActivity(), account, user);
 				}
 			}
 		});
