@@ -14,8 +14,12 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.PixelXorXfermode;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.Xfermode;
 import android.graphics.Paint.Align;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -534,6 +538,7 @@ public class DetailsFragment extends SherlockFragment {
 		public LikesDrawable() {
 			mLikesIcon = getResources().getDrawable(R.drawable.details_like);
 			mTextPaint.setColor(Color.BLACK);
+			mTextPaint.setShadowLayer(2, 0, 0, Color.WHITE);
 			mTextPaint.setTextAlign(Align.CENTER);
 			mTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
 			mTextPaint.setTextSize(15 * getResources().getDisplayMetrics().density);
