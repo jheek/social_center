@@ -58,7 +58,7 @@ public class SearchColumn extends MergedColumnMessageProvider {
 	
 	public void addAccount(IAccount account) {
 		mAccounts.add(account);
-		addProvider(account.createSearchColumn(mQuery));
+		addProvider(account.addSearchColumn(mQuery));
 	}
 	
 	public void removeAccount(IAccount account) {
@@ -66,9 +66,17 @@ public class SearchColumn extends MergedColumnMessageProvider {
 		for (int i = 0; i < mAccounts.size(); i++) {
 			ISearchableColumn column = (ISearchableColumn) mProviders.get(i);
 			if (column.getAccount() == account) {
+				account.removeSearchColumn(column);
 				removeProvider(column);
 				break;
 			}
+		}
+	}
+	
+	public void cleanup() {
+		for (int i = mAccounts.size() - 1; i >= 0; i--) {
+			IAccount account = mAccounts.get(i);
+			removeAccount(account);
 		}
 	}
 }

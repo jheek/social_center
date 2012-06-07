@@ -23,7 +23,8 @@ public interface IAccount {
 	public Chat findMessageChat(Message msg);
 	public boolean sendChatMsg(Chat chat, String text);
 	
-	public ISearchableColumn createSearchColumn(String query);
+	public ISearchableColumn addSearchColumn(String query);
+	public void removeSearchColumn(ISearchableColumn column);
 	
 	public void searchPeopleLocal(SortedArrayList<User> target, String query);
 	public boolean searchPeople(SortedArrayList<User> target, String query);

@@ -90,6 +90,8 @@ public class TwitterAccount implements IAccount {
 	
 	private ArrayList<TwitterUserProvider> mUserProviders = new ArrayList<TwitterUserProvider>();
 	
+	private ArrayList<TwitterSearchColumn> mSearchProviders = new ArrayList<TwitterSearchColumn>();
+	
 	public TwitterAccount(Context c, long id, String name, String profilePictureUri, String token, String secret) {
 		this.mContext = c;
 		this.mBundle = new StorageBundle();
@@ -198,7 +200,7 @@ public class TwitterAccount implements IAccount {
 		return mBundle;
 	}
 	
-	public Twitter getTwitter() throws TwitterException {
+	public synchronized Twitter getTwitter() throws TwitterException {
 		if (mTwitter == null) {
 			mTwitter = new TwitterFactory().getInstance();
 			mTwitter.setOAuthConsumer(TwitterConfiguration.OAUTH_CONSUMER_KEY, TwitterConfiguration.OAUTH_CONSUMER_SECRET);
@@ -941,8 +943,15 @@ public class TwitterAccount implements IAccount {
 	}
 	
 	@Override
-	public ISearchableColumn createSearchColumn(String pQuery) {
-		return new TwitterSearchColumn(this, pQuery, null);
+	public ISearchableColumn addSearchColumn(String pQuery) {
+		TwitterSearchColumn column = new TwitterSearchColumn(this, pQuery, null);
+		mSearchProviders.add(column);
+		return column;
+	}
+	
+	@Override
+	public void removeSearchColumn(ISearchableColumn column) {
+		mSearchProviders.remove(column);
 	}
 	
 	public void searchLocal(SortedArrayList<Message> target, String query) {
@@ -1097,6 +1106,12 @@ public class TwitterAccount implements IAccount {
 		Message msg;
 		for (int i = mUserProviders.size() - 1; i >= 0; i--) {
 			msg = findMessage(mUserProviders.get(i).getMessages(), msgPreID, msgID, type);
+			if (msg != null) {
+				return msg;
+			}
+		}
+		for (int i = mSearchProviders.size() - 1; i >= 0; i--) {
+			msg = findMessage(mSearchProviders.get(i).getMessages(), msgPreID, msgID, type);
 			if (msg != null) {
 				return msg;
 			}

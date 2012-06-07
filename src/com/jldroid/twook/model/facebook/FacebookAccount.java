@@ -89,6 +89,8 @@ public class FacebookAccount implements IAccount, PacketListener {
 	
 	private ArrayList<FacebookUserProvider> mUserProviders = new ArrayList<FacebookUserProvider>();
 	
+	private ArrayList<FacebookSearchColumn> mSearchProviders = new ArrayList<FacebookSearchColumn>();
+	
 	private BaseSyncableDataProvider mHomeProvider = new BaseSyncableDataProvider() {
 		
 		protected SyncableData getData() {
@@ -1182,8 +1184,15 @@ public class FacebookAccount implements IAccount, PacketListener {
 	}
 	
 	@Override
-	public ISearchableColumn createSearchColumn(String pQuery) {
-		return new FacebookSearchColumn(this, pQuery, null);
+	public ISearchableColumn addSearchColumn(String pQuery) {
+		FacebookSearchColumn column = new FacebookSearchColumn(this, pQuery, null);
+		mSearchProviders.add(column);
+		return column;
+	}
+	
+	@Override
+	public void removeSearchColumn(ISearchableColumn column) {
+		mSearchProviders.remove(column);
 	}
 	
 	public void updateSearchAsync(final INetworkCallback callback, final FacebookSearchColumn column, final SyncableData syncable, final boolean enlarge) {
@@ -1864,6 +1873,12 @@ public class FacebookAccount implements IAccount, PacketListener {
 		Message msg;
 		for (int i = mUserProviders.size() - 1; i >= 0; i--) {
 			msg = findMessage(mUserProviders.get(i).getMessages(), msgPreID, msgID, type);
+			if (msg != null) {
+				return msg;
+			}
+		}
+		for (int i = mSearchProviders.size() - 1; i >= 0; i--) {
+			msg = findMessage(mSearchProviders.get(i).getMessages(), msgPreID, msgID, type);
 			if (msg != null) {
 				return msg;
 			}

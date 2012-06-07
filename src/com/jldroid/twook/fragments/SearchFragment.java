@@ -173,6 +173,13 @@ public class SearchFragment extends SherlockFragment implements OnPageChangeList
 	}
 	
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mSearchColumn.cleanup();
+		mSearchColumn = null;
+	}
+	
+	@Override
 	public void onCreateOptionsMenu(Menu pMenu, MenuInflater pInflater) {
 		super.onCreateOptionsMenu(pMenu, pInflater);
 		mSearchItem = pMenu.add(Menu.NONE, 1, Menu.NONE, R.string.search).setIcon(R.drawable.actionbar_search);
