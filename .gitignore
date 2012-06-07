@@ -1,5 +1,8 @@
 project.properties
 PrivateKeys.java
+drawable-ldpi/
+drawable-mdpi/
+drawable-hdpi/
 
 # built application files
 *.apk
