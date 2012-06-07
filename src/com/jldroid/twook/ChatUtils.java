@@ -9,7 +9,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat.Builder;
 
-import com.jldroid.twook.activities.MainActivity;
+import com.jldroid.twook.activities.ChatActivity;
+import com.jldroid.twook.fragments.ChatFragment;
 import com.jldroid.twook.model.Chat;
 import com.jldroid.twook.model.ImageManager;
 import com.jldroid.twook.model.ImageManager.DeletionTrigger;
@@ -44,9 +45,9 @@ public class ChatUtils {
 		NotificationManager nm = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
 		int unread = chat.getUnread();
 		String msg = unread == 1 ? c.getString(R.string.chat_notification_msg_single, from.name) : c.getString(R.string.chat_notification_msg_multi, unread, from.name);
-		Intent intent = new Intent(c, MainActivity.class)
-			.putExtra(MainActivity.EXTRA_CHAT, chat.getID())
-			.putExtra(MainActivity.EXTRA_ACCOUNT, chat.getAccount().getUser().id)
+		Intent intent = new Intent(c, ChatActivity.class)
+			.putExtra(ChatFragment.EXTRA_CHAT, chat.getID())
+			.putExtra(ChatFragment.EXTRA_ACCOUNT, chat.getAccount().getUser().id)
 			.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.setData(Uri.parse("chat:/" + chat.getID()));
 		Notification not = new Builder(c)

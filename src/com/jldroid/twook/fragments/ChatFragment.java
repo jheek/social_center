@@ -1,7 +1,5 @@
 package com.jldroid.twook.fragments;
 
-import java.util.ArrayList;
-
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -20,17 +18,19 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.jdroid.utils.SortedArrayList;
 import com.jdroid.utils.Threads;
 import com.jdroid.utils.TimeUtils;
 import com.jldroid.twook.ChatUtils;
 import com.jldroid.twook.FastBitmapDrawable;
 import com.jldroid.twook.R;
+import com.jldroid.twook.model.AccountsManager;
 import com.jldroid.twook.model.Chat;
-import com.jldroid.twook.model.Message;
 import com.jldroid.twook.model.Chat.ChatListener;
 import com.jldroid.twook.model.ChatMessage;
+import com.jldroid.twook.model.IAccount;
 import com.jldroid.twook.model.ImageManager.LoadBitmapCallback;
-import com.jldroid.twook.model.User;
+import com.jldroid.twook.model.Message;
 import com.jldroid.twook.model.facebook.FacebookAccount;
 import com.jldroid.twook.model.twitter.TwitterAccount;
 import com.jldroid.twook.view.ColoredFadeoutDrawable;
@@ -40,7 +40,9 @@ public class ChatFragment extends SherlockFragment implements OnClickListener, C
 
 	public static final String EXTRA_CHAT_MSG = "com.jldroid.twook.CHAT_MSG";
 	
-	private final int MAX_RECIPIENTS = 3;
+	public static final String EXTRA_ACCOUNT = "com.jldroid.twook.ACCOUNT";
+	public static final String EXTRA_CHAT = "com.jldroid.twook.CHAT";
+	
 	private static final int COLORED_FADEOUT_COLOR = 0xff008FD5;
 	
 	private ListView mListView;
@@ -58,10 +60,24 @@ public class ChatFragment extends SherlockFragment implements OnClickListener, C
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mMsg = Message.findMessage(getActivity(), getArguments().getBundle(EXTRA_CHAT_MSG));
-		if (mMsg != null) {
-			mChat = mMsg.getChat();
+		if (getArguments().containsKey(EXTRA_CHAT_MSG)) {
+			mMsg = Message.findMessage(getActivity(), getArguments().getBundle(EXTRA_CHAT_MSG));
+			if (mMsg != null) {
+				mChat = mMsg.getChat();
+			}
+		} else {
+			IAccount account = AccountsManager.getInstance(getActivity()).findAccount(getArguments().getLong(EXTRA_ACCOUNT));
+			long chatID = getArguments().getLong(EXTRA_CHAT);
+			SortedArrayList<Chat> chats = account.getChats();
+			for (int i = chats.size() - 1; i >= 0; i--) {
+				Chat chat = chats.get(i);
+				if (chat.getID() == chatID) {
+					mChat = chat;
+					break;
+				}
+			}
 		}
+		
 		if (mChat == null) {
 			getActivity().finish();
 		}
