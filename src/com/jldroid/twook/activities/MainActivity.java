@@ -50,9 +50,6 @@ public class MainActivity extends SherlockFragmentActivity {
 	public static final String EXTRA_ACCOUNT = "com.jldroid.twook.ACCOUNT";
 	public static final String EXTRA_CHAT = "com.jldroid.twook.CHAT";
 	
-	public static final int REQUEST_CODE_COMPOSE_PICK_IMAGE = 1000;
-	public static final int REQUEST_CODE_SETUP = 1001;
-	
 	private SharedPreferences mPrefs;
 	
 	private MainPhoneFragment mFrag;
@@ -108,19 +105,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 		ImageManager.getInstance(getApplicationContext()).flush();
 		StorageManager.getDeflaut(getApplicationContext()).flushAsync();
-	}
-	
-	@Override
-	protected void onActivityResult(int pRequestCode, int pResultCode, Intent pData) {
-		switch (pRequestCode) {
-		case REQUEST_CODE_COMPOSE_PICK_IMAGE:
-			ComposeFragment composeFragment = (ComposeFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentHolder);
-			if (composeFragment != null)
-				composeFragment.onPickImageResult(pResultCode, pData);
-			break;
-		default:
-			break;
-		}
 	}
 	
 	@Override

@@ -32,6 +32,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.jldroid.twook.R;
+import com.jldroid.twook.activities.ComposeActivity;
 import com.jldroid.twook.activities.MainActivity;
 import com.jldroid.twook.model.IAccount;
 import com.jldroid.twook.model.PendingPost;
@@ -173,7 +174,7 @@ public class ComposeFragment extends SherlockFragment {
 	private void addPicture() {
 		Intent intent = new Intent(Intent.ACTION_PICK);
 		intent.setType("image/*");
-		((getActivity())).startActivityForResult(intent, MainActivity.REQUEST_CODE_COMPOSE_PICK_IMAGE);
+		getActivity().startActivityForResult(intent, ComposeActivity.REQUEST_CODE_COMPOSE_PICK_IMAGE);
 	}
 	
 	public void onPickImageResult(int resultCode, Intent pData) {
