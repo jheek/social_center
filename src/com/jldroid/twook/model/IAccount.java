@@ -21,6 +21,7 @@ public interface IAccount {
 	
 	public SortedArrayList<Chat> getChats();
 	public Chat findMessageChat(Message msg);
+	public Message findChatMessage(Chat chat);
 	public boolean sendChatMsg(Chat chat, String text);
 	
 	public ISearchableColumn addSearchColumn(String query);

@@ -73,6 +73,7 @@ public class ChatFragment extends SherlockFragment implements OnClickListener, C
 				Chat chat = chats.get(i);
 				if (chat.getID() == chatID) {
 					mChat = chat;
+					mMsg = account.findChatMessage(chat);
 					break;
 				}
 			}

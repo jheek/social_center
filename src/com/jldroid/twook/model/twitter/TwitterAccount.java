@@ -1086,6 +1086,18 @@ public class TwitterAccount implements IAccount {
 	}
 	
 	@Override
+	public Message findChatMessage(Chat chat) {
+		SortedArrayList<Message> msgs = mDirectMessages.list;
+		for (int i = 0; i < msgs.size(); i++) {
+			Message msg = msgs.get(i);
+			if (msg.ID == chat.getID()) {
+				return msg;
+			}
+		}
+		return null;
+	}
+	
+	@Override
 	public boolean sendChatMsg(Chat pChat, String pText) {
 		return sendDirectMessage(pChat.getID(), pText);
 	}

@@ -842,6 +842,18 @@ public class FacebookAccount implements IAccount, PacketListener {
 		return null;
 	}
 	
+	@Override
+	public Message findChatMessage(Chat chat) {
+		SortedArrayList<Message> msgs = mMessages.list;
+		for (int i = 0; i < msgs.size(); i++) {
+			Message msg = msgs.get(i);
+			if (msg.ID == chat.getID()) {
+				return msg;
+			}
+		}
+		return null;
+	}
+	
 	public boolean updateChat(final Chat chat, boolean enlarge) {
 		try {
 			StringBuilder query = new StringBuilder("{\"messages\" : \"SELECT message_id, author_id, body, created_time FROM message WHERE thread_id = ");
