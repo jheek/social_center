@@ -1,6 +1,7 @@
 package com.jldroid.twook.fragments;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,6 +32,8 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.jdroid.utils.SortedArrayList;
+import com.jdroid.utils.StorageManager.StorageBundle;
 import com.jldroid.twook.R;
 import com.jldroid.twook.activities.ComposeActivity;
 import com.jldroid.twook.activities.MainActivity;
@@ -42,8 +45,6 @@ import com.jldroid.twook.model.facebook.FacebookAccount;
 import com.jldroid.twook.model.twitter.TwitterAccount;
 import com.jldroid.twook.view.AccountTabsView;
 import com.jldroid.twook.view.UserAdapter;
-import java.util.ArrayList;
-import com.jdroid.utils.SortedArrayList;
 
 public class ComposeFragment extends SherlockFragment {
 
@@ -348,7 +349,9 @@ public class ComposeFragment extends SherlockFragment {
 			mode = ComposeMode.valueOf(bundle.getString("mode"));
 			targetID = bundle.getLong("targetID", 0);
 			byte[] bytes = bundle.getByteArray("targetUser");
-			
+			if (bytes != null) {
+				targetUser = new User(StorageBundle.create(bytes));
+			}
 		}
 		
 		public ComposeConfig(ComposeMode mode) {
