@@ -258,7 +258,9 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
     
     @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
-    	mCurrentView.scrollToTop();
+    	if (mCurrentView != null) {
+    		mCurrentView.scrollToTop();
+    	}
     }
     
     @Override
