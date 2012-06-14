@@ -1,10 +1,6 @@
 package com.jldroid.twook.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
-
-import java.util.ArrayList;
-import com.jdroid.utils.SortedArrayList;
 
 public abstract class BaseColumnMessagesProvider implements ColumnMessagesProvider {
 	

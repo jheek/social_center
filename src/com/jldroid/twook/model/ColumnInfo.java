@@ -34,6 +34,8 @@ public class ColumnInfo implements Comparable<ColumnInfo>, ColumnProviderListene
 	
 	private long mSyncInterval;
 	
+	private int mOldUnread = -1;
+	
 	public ColumnInfo(Context c, int order, IAccount account, ColumnMessagesProvider provider) {
 		mContext = c;
 		mOrder = order;
@@ -64,6 +66,7 @@ public class ColumnInfo implements Comparable<ColumnInfo>, ColumnProviderListene
 		mLED = mBundle.readBool("LED", true);
 		
 		provider.addListener(this);
+		mOldUnread = provider.getUnreadMessageCount();
 		
 		// TODO mProvider.setUnreadMessageCount(mBundle.readInt("UNREAD", 0));
 	}
@@ -196,11 +199,13 @@ public class ColumnInfo implements Comparable<ColumnInfo>, ColumnProviderListene
 			mProvider.resetUnreadMessages();
 		}
 		if (isShowNotification() && isEnabled) {
-			UnreadNotificationManager.getInstance(mContext).updateNotification(mProvider, mSound, mRingtoneUri, mVibrate, mLED);
+			if (mOldUnread != mProvider.getUnreadMessageCount()) {
+				UnreadNotificationManager.getInstance(mContext).updateNotification(mProvider, mSound, mRingtoneUri, mVibrate, mLED);
+			}
 		} else {
 			UnreadNotificationManager.getInstance(mContext).removeNotification(mProvider);
 		}
-		
+		mOldUnread = mProvider.getUnreadMessageCount();
 	}
 	
 	@Override
