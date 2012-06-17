@@ -15,6 +15,7 @@ import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Message.Type;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.Presence.Mode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -483,10 +484,12 @@ public class FacebookAccount implements IAccount, PacketListener {
 						connection.getRoster().addRosterListener(new RosterListener() {
 							@Override
 							public void presenceChanged(Presence pArg0) {
+								Log.i("FBCHAT", "PRESENCE CHANGED from: " + mConnection.getRoster().getEntry(pArg0.getFrom()).getName()  + " type: " + pArg0.getType() + " status: " + pArg0.getStatus() + " mode: " + pArg0.getMode());
 							}
 							
 							@Override
 							public void entriesUpdated(Collection<String> pArg0) {
+								Log.i("FBCHAT", "ENTRIES UPDATED");
 							}
 							
 							@Override
@@ -495,6 +498,7 @@ public class FacebookAccount implements IAccount, PacketListener {
 							
 							@Override
 							public void entriesAdded(Collection<String> pArg0) {
+								Log.i("FBCHAT", "ENTRIES ADDED");
 							}
 						});
 						connection.addConnectionListener(new ConnectionListener() {
@@ -527,11 +531,6 @@ public class FacebookAccount implements IAccount, PacketListener {
 						});
 						if (connection.isAuthenticated()) {
 							updatePresence();
-							/*org.jivesoftware.smack.packet.Message msg = new org.jivesoftware.smack.packet.Message();
-							msg.setBody("TEST");
-							msg.setFrom("-100000974038353@");
-							msg.setTo("-" + mUser.id + "@");
-							processPacket(msg);*/
 							mConnection = connection;
 							isChatConnected = true;
 							Threads.runOnUIThread(new Runnable() {
@@ -566,8 +565,10 @@ public class FacebookAccount implements IAccount, PacketListener {
 			public void run() {
 				if(isChatConnected) {
 					try {
-						mConnection.sendPacket(new Presence(mAvailable ? org.jivesoftware.smack.packet.Presence.Type.available : 
-							org.jivesoftware.smack.packet.Presence.Type.unavailable));
+						Presence presence = new Presence(mAvailable ? org.jivesoftware.smack.packet.Presence.Type.available : 
+							org.jivesoftware.smack.packet.Presence.Type.unavailable);
+						presence.setMode(mAvailable ? Mode.available : Mode.away);
+						mConnection.sendPacket(presence);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
