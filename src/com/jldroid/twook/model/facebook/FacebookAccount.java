@@ -565,8 +565,8 @@ public class FacebookAccount implements IAccount, PacketListener {
 			public void run() {
 				if(isChatConnected) {
 					try {
-						Presence presence = new Presence(mAvailable ? org.jivesoftware.smack.packet.Presence.Type.available : 
-							org.jivesoftware.smack.packet.Presence.Type.unavailable);
+						Presence presence = new Presence(mAvailable ? org.jivesoftware.smack.packet.Presence.Type.subscribe : 
+							org.jivesoftware.smack.packet.Presence.Type.unsubscribe);
 						presence.setMode(mAvailable ? Mode.available : Mode.away);
 						mConnection.sendPacket(presence);
 					} catch (Exception e) {
