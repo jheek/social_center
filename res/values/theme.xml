@@ -15,7 +15,11 @@
     <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
     <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
     <item name="android:windowAnimationStyle">@style/MyActivityAnimations</item>
-
+ 
+    <item name="actionBarTabStyle">@style/customActionTabStyle</item>
+ <item name="actionBarTabStyle">@style/Widget.Sherlock.ActionBar.TabView</item>
+        <item name="actionBarTabBarStyle">@style/Widget.Sherlock.ActionBar.TabBar</item>
+        <item name="actionBarTabTextStyle">@style/Widget.Sherlock.ActionBar.TabText</item>
     </style>
 
     <style name="CustomTheme.Dark" parent="android:Theme.Black.NoTitleBar">
