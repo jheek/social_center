@@ -16,7 +16,7 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Non focused states -->
-    <item android:state_focused="false" android:state_selected="false" android:state_pressed="false" android:drawable="@drawable/ab_background" />
+    <item android:state_focused="false" android:state_selected="false" android:state_pressed="false" android:drawable="@drawable/actiontabbarbg" />
     <item android:state_focused="false" android:state_selected="true"  android:state_pressed="false" android:drawable="@drawable/actiontabbarbgclicked" /> 
 
     <!-- Focused states -->
