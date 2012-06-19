@@ -10,6 +10,8 @@ import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -22,7 +24,6 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.util.Log;
-import android.util.SparseArray;
 
 import com.jdroid.utils.FastBufferedInputStream;
 import com.jdroid.utils.StorageManager;
@@ -33,7 +34,6 @@ public class ImageManager {
 	
 	private static final long FLUSH_DELAY = 10000;
 	
-	public static final int REF_HARD = 0;
 	public static final int REF_WEAK = 1;
 	public static final int REF_SOFT = 2;
 	
@@ -45,7 +45,7 @@ public class ImageManager {
 	
 	protected File mCacheDir;
 	
-	private SparseArray<CachedImage> mCachedImages;
+	private HashMap<String, CachedImage> mCachedImages;
 	
 	private int mFilenameCounter;
 	
@@ -74,13 +74,13 @@ public class ImageManager {
 		mFilenameCounter = mStorageManager.readInt("COUNTER", 0);
 		StorageBundle[] bundles = mStorageManager.readBundleArray("IMAGES", null);
 		if (bundles != null) {
-			mCachedImages = new SparseArray<CachedImage>(bundles.length);
+			mCachedImages = new HashMap<String, CachedImage>(bundles.length);
 			for (int i = 0; i < bundles.length; i++) {
 				CachedImage img = new CachedImage(bundles[i]);
-				mCachedImages.put(img.getUri().hashCode(), img);
+				mCachedImages.put(img.getUri(), img);
 			}
 		} else {
-			mCachedImages = new SparseArray<CachedImage>(10);
+			mCachedImages = new HashMap<String, CachedImage>(10);
 		}
 		checkCache();
 	}
@@ -90,7 +90,7 @@ public class ImageManager {
 	}
 	
 	public CachedImage peekCachedImage(String uri) {
-		return uri != null ? mCachedImages.get(uri.hashCode(), null) : null;
+		return uri != null ? mCachedImages.get(uri) : null;
 	}
 	
 	public Bitmap peekImage(String uri) {
@@ -128,7 +128,7 @@ public class ImageManager {
 	}
 	
 	public void loadProfilePicture(LoadBitmapCallback callback, String uri, DeletionTrigger deletionTrigger) {
-		loadImage(callback, uri, deletionTrigger, REF_HARD, mProfilePictureSize, mProfilePictureSize, 80);
+		loadImage(callback, uri, deletionTrigger, REF_SOFT, mProfilePictureSize, mProfilePictureSize, 80);
 	}
 	
 	public void loadImage(LoadBitmapCallback callback, String uri, DeletionTrigger deletionTrigger, int refType,
@@ -139,7 +139,7 @@ public class ImageManager {
 		CachedImage cachedImage = peekCachedImage(uri);
 		if (cachedImage == null) {
 			cachedImage = new CachedImage(uri, deletionTrigger, refType);
-			mCachedImages.put(uri.hashCode(), cachedImage);
+			mCachedImages.put(uri, cachedImage);
 			updateStorage();
 		} else {
 			if (deletionTrigger.isLonger(cachedImage.getDeletionTrigger())) {
@@ -164,7 +164,11 @@ public class ImageManager {
 	}
 	
 	private synchronized void unloadImage(CachedImage img) {
-		mCachedImages.delete(img.getUri().hashCode());
+		mCachedImages.remove(img.getUri());
+		cleanupImage(img);
+	}
+	
+	private void cleanupImage(CachedImage img) {
 		img.releaseBmd();
 		String filename = img.getFilename();
 		if (filename != null) {
@@ -174,8 +178,8 @@ public class ImageManager {
 	}
 	
 	public synchronized void deleteAll() {
-		for (int i = mCachedImages.size() - 1; i >= 0; i--) {
-			unloadImage(mCachedImages.valueAt(i));
+		for (CachedImage img : mCachedImages.values()) {
+			cleanupImage(img);
 		}
 		mCachedImages.clear();
 		mFilenameCounter = 0;
@@ -185,16 +189,18 @@ public class ImageManager {
 	
 	private synchronized void updateStorage() {
 		StorageBundle[] bundles = new StorageBundle[mCachedImages.size()];
-		for (int i = 0; i < bundles.length; i++) {
-			bundles[i] = mCachedImages.valueAt(i).getBundle();
+		int i = 0;
+		for (CachedImage img : mCachedImages.values()) {
+			bundles[i] = img.getBundle();
+			i++;
 		}
 		mStorageManager.write("IMAGES", bundles);
 		mStorageManager.flushAsync(FLUSH_DELAY);
 	}
 	
 	public synchronized void releaseCache() {
-		for (int i = 0; i < mCachedImages.size(); i++) {
-			mCachedImages.valueAt(i).releaseBmd();
+		for (CachedImage img : mCachedImages.values()) {
+			img.releaseBmd();
 		}
 	}
 	
@@ -211,10 +217,14 @@ public class ImageManager {
 	
 	public synchronized void checkCache() {
 		int removedCount = 0;
-		for (int i = mCachedImages.size() - 1; i >= 0; i--) {
-			CachedImage cachedImg = mCachedImages.valueAt(i);
+		
+		Iterator<CachedImage> iterator = mCachedImages.values().iterator();
+		
+		while (iterator.hasNext()) {
+			CachedImage cachedImg = iterator.next();
 			if (cachedImg.getDeletionTrigger().isDirty(cachedImg.getLoadTime(), cachedImg.getLastUsedTime())) {
-				unloadImage(cachedImg);
+				iterator.remove();
+				cleanupImage(cachedImg);
 				removedCount++;
 			}
 		}
@@ -263,7 +273,7 @@ public class ImageManager {
 			mBundle = bundle;
 			mUri = bundle.readString("URI", null);
 			mDeletionTrigger = values[bundle.readInt("DELETIONTRIGGER", 0)];
-			mRefType = bundle.readInt("REFTYPE", REF_HARD);
+			mRefType = bundle.readInt("REFTYPE", REF_SOFT);
 			mFilename = bundle.readString("FILENAME", null);
 			mLoadTime = bundle.readLong("LOADTIME", -1);
 			mLastUsedTime = bundle.readLong("LASTUSEDTIME", -1);
@@ -282,8 +292,6 @@ public class ImageManager {
 			}
 			setLastUsedTime(System.currentTimeMillis());
 			switch (mRefType) {
-			case REF_HARD:
-				return (Bitmap) mRef;
 			case REF_WEAK:
 				return ((WeakReference<Bitmap>) mRef).get();
 			case REF_SOFT:
@@ -295,17 +303,13 @@ public class ImageManager {
 		
 		private synchronized void setBitmap(Bitmap bmd) {
 			switch (mRefType) {
-			case REF_HARD:
-				mRef = bmd;
-				break;
 			case REF_WEAK:
 				mRef = new WeakReference<Bitmap>(bmd);
 				break;
 			case REF_SOFT:
-				mRef = new SoftReference<Bitmap>(bmd);
-				break;
 			default:
-				throw new IllegalStateException("UNKNOWN REF TYPE: " + mRefType);
+				mRefType = REF_SOFT;
+				mRef = new SoftReference<Bitmap>(bmd);
 			}
 			setLastUsedTime(System.currentTimeMillis());
 			for (int i = mCallbackQueue.size() - 1; i >= 0; i--) {
@@ -316,6 +320,15 @@ public class ImageManager {
 			}
 			mCallbackQueue.clear();
 			mLoading = false;
+			
+			/*int cacheSize = 0;
+			for (CachedImage img : mCachedImages.values()) {
+				bmd = img.peekBmd();
+				if (bmd != null) {
+					cacheSize += bmd.getByteCount();
+				}
+			}
+			Log.i("JDROID", "CACHE SIZE: " + cacheSize / 1024f + "kb");*/
 		}
 		
 		public synchronized void cancel() {

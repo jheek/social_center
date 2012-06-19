@@ -10,8 +10,6 @@ import android.widget.TextView;
 import com.jdroid.utils.Threads;
 import com.jldroid.twook.FastBitmapDrawable;
 import com.jldroid.twook.R;
-import com.jldroid.twook.activities.MainActivity;
-import com.jldroid.twook.fragments.ViewProfileFragment;
 import com.jldroid.twook.model.AccountsManager;
 import com.jldroid.twook.model.ImageManager;
 import com.jldroid.twook.model.ImageManager.DeletionTrigger;
@@ -124,7 +122,7 @@ public class MessageViewHolder implements LoadBitmapCallback {
 					mPreviewIV.setLayoutParams(mPreviewIV.getLayoutParams());
 				}
 				mPreviewIV.setBackgroundResource(R.drawable.no_profileimg_img);
-				im.loadImage(this, img.src, DeletionTrigger.AFTER_ONE_DAY_UNUSED, ImageManager.REF_HARD, -1, -1, 80);
+				im.loadImage(this, img.src, DeletionTrigger.AFTER_ONE_DAY_UNUSED, ImageManager.REF_WEAK, -1, -1, 80);
 			} else {
 				mPreviewDrawable.setBitmap(previewBmd, false);
 				mPreviewIV.setBackgroundDrawable(mPreviewDrawable);

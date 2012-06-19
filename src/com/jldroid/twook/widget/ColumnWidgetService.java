@@ -122,7 +122,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, 
         	uri = msg.facebookImages.get(0).src;
         	previewBmd = im.peekImage(uri);
         	if (previewBmd == null) {
-        		im.loadImage(this, uri, DeletionTrigger.AFTER_ONE_DAY_UNUSED, ImageManager.REF_HARD, -1, -1, 80);
+        		im.loadImage(this, uri, DeletionTrigger.AFTER_ONE_DAY_UNUSED, ImageManager.REF_WEAK, -1, -1, 80);
             	synchronized (sWaitObj) {
     				try {
     					sWaitObj.wait();
