@@ -31,4 +31,8 @@ public abstract class SingleSherlockFragmentActivity extends SherlockFragmentAct
 	
 	public abstract Fragment createFragment();
 	
+	public Fragment getFragment() {
+		return getSupportFragmentManager().findFragmentById(android.R.id.content);
+	}
+	
 }

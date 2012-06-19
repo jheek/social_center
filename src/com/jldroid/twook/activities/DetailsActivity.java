@@ -11,4 +11,12 @@ public class DetailsActivity extends SingleSherlockFragmentActivity {
 		return new DetailsFragment();
 	};
 	
+	@Override
+	public void onBackPressed() {
+		DetailsFragment frag = (DetailsFragment) getFragment();
+		if (!frag.onBackPressed()) {
+			super.onBackPressed();
+		}
+	}
+	
 }

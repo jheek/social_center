@@ -27,9 +27,13 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -44,6 +48,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -81,9 +86,6 @@ public class DetailsFragment extends SherlockFragment {
 	
 	// views
 	private ListView mListView;
-	private LinearLayout mComposeCommentHolder;
-	private EditText mCommentET;
-	private ImageView mSendCommentBtn;
 	
 	// header
 	private ViewGroup mHeader;
@@ -102,12 +104,12 @@ public class DetailsFragment extends SherlockFragment {
 	
 	private MyAdapter mAdapter;
 	
-	private DetailsFragment mFragment;
-	
 	private MenuItem mRefreshItem;
 	private MenuItem mLikeItem;
 	private MenuItem mLikesItem;
+	
 	private MenuItem mCommentItem;
+	private boolean isCommenting = false;
 	
 	@Override
 	public void onCreate(Bundle pSavedInstanceState) {
@@ -135,21 +137,8 @@ public class DetailsFragment extends SherlockFragment {
 		mAttachmentsLoadingView = h.findViewById(R.id.attachmentsLoadingView);
 		mSenderTV = (TextView) h.findViewById(R.id.senderTV);
 		
-		mComposeCommentHolder = (LinearLayout) v.findViewById(R.id.composeCommentHolder);
-		mCommentET = (EditText) v.findViewById(R.id.commentET);
-		mSendCommentBtn = (ImageView) v.findViewById(R.id.sendCommentBtn);
-		
 		mProfileDrawable = new ProfileImageDrawable(getActivity());
 		mProfileIV.setBackgroundDrawable(mProfileDrawable);
-		
-		/*TypedArray a = getActivity().obtainStyledAttributes(null, R.styleable.DetailsView, R.attr.DetailsViewStyle, 0);
-		if (VERSION.SDK_INT < 11) {
-			Drawable commentsBG = a.getDrawable(R.styleable.DetailsView_commentsBackground);
-			if (commentsBG != null) {
-				mListView.setSelector(commentsBG);
-			}
-		}
-		a.recycle();*/
 		return v;
 	}
 	
@@ -166,12 +155,10 @@ public class DetailsFragment extends SherlockFragment {
 		mAdapter = new MyAdapter();
 		mListView.addHeaderView(mHeader);
 		mListView.setAdapter(mAdapter);
-		mSendCommentBtn.setBackgroundDrawable(new ColoredFadeoutDrawable(COLORED_FADEOUT_COLOR));
 
 		boolean isFacebookPhoto = mMessage.type == Message.TYPE_FACEBOOK_PHOTO;
 		
 		if (mMessage.isTwitter()) {
-			mComposeCommentHolder.setVisibility(View.GONE);
 			mAttachmentsHolder.setVisibility(View.GONE);
 		} else if (mMessage.isFacebook()) {
 			
@@ -186,37 +173,6 @@ public class DetailsFragment extends SherlockFragment {
 			@Override
 			public void onClick(View v) {
 				AccountsManager.viewProfile(getActivity(), mMessage.account, mMessage.sender);
-			}
-		});
-		
-		mSendCommentBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View pV) {
-				((ColoredFadeoutDrawable)pV.getBackground()).startFadeout();
-				final String update = mCommentET.getText().toString();
-				if (TextUtils.isEmpty(update)) {
-					Toast.makeText(getActivity().getApplicationContext(), "Cannot post a comment without text", Toast.LENGTH_LONG).show();
-				} else {
-					mCommentET.setText("");
-					final ProgressDialog dialog = ProgressDialog.show(getActivity(), "Posting comment", "Please wait a moment...", true, false);
-					Threads.runOnNetworkThread(new Runnable() {
-						@Override
-						public void run() {
-							final boolean result = ((FacebookAccount) mMessage.account).postComment(mMessage, update);
-							Threads.runOnUIThread(new Runnable() {
-								@Override
-								public void run() {
-									dialog.dismiss();
-									if (result) {
-										updateComments();
-									} else {
-										Toast.makeText(getActivity().getApplicationContext(), "Failed to post comment", Toast.LENGTH_LONG).show();
-									}
-								}
-							});
-						}
-					});
-				}
 			}
 		});
 		
@@ -264,19 +220,64 @@ public class DetailsFragment extends SherlockFragment {
 		}
 	}
 	
+	public void setCommenting(boolean v) {
+		this.isCommenting = v;
+		getSherlockActivity().invalidateOptionsMenu();
+	}
+	
 	@Override
 	public void onCreateOptionsMenu(Menu pMenu, MenuInflater pInflater) {
 		super.onCreateOptionsMenu(pMenu, pInflater);
-		pMenu.add(Menu.NONE, 1, Menu.NONE, R.string.share).setIcon(R.drawable.details_share).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		if (mMessage.isFacebook()) {
-			mRefreshItem = pMenu.add(Menu.NONE, 2, Menu.NONE, R.string.refresh).setIcon(R.drawable.actionbar_refresh).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
-			mLikeItem = pMenu.add(Menu.NONE, 3, Menu.NONE, R.string.like).setIcon(mMessage.userLikes ? R.drawable.details_dislike : R.drawable.details_like).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
-			mLikesItem = pMenu.add(Menu.NONE, 4, Menu.NONE, R.string.likes).setIcon(new LikesDrawable()).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
-			pMenu.add(Menu.NONE, 5, Menu.NONE, R.string.comment).setIcon(R.drawable.details_reply).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		if (!isCommenting) {
+			pMenu.add(Menu.NONE, 1, Menu.NONE, R.string.share).setIcon(R.drawable.details_share).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+			if (mMessage.isFacebook()) {
+				mRefreshItem = pMenu.add(Menu.NONE, 2, Menu.NONE, R.string.refresh).setIcon(R.drawable.actionbar_refresh).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+				mLikeItem = pMenu.add(Menu.NONE, 3, Menu.NONE, R.string.like).setIcon(mMessage.userLikes ? R.drawable.details_dislike : R.drawable.details_like).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+				mLikesItem = pMenu.add(Menu.NONE, 4, Menu.NONE, R.string.likes).setIcon(new LikesDrawable()).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+				pMenu.add(Menu.NONE, 5, Menu.NONE, R.string.comment).setIcon(R.drawable.details_reply).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+			} else {
+				pMenu.add(Menu.NONE, 6, Menu.NONE, R.string.retweet).setIcon(R.drawable.details_retweet).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+				pMenu.add(Menu.NONE, 7, Menu.NONE, R.string.reply).setIcon(R.drawable.details_reply).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+				pMenu.add(Menu.NONE, 8, Menu.NONE, R.string.favorite).setIcon(R.drawable.details_favorite).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+			}
 		} else {
-			pMenu.add(Menu.NONE, 6, Menu.NONE, R.string.retweet).setIcon(R.drawable.details_retweet).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
-			pMenu.add(Menu.NONE, 7, Menu.NONE, R.string.reply).setIcon(R.drawable.details_reply).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
-			pMenu.add(Menu.NONE, 8, Menu.NONE, R.string.favorite).setIcon(R.drawable.details_favorite).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+			MenuItem item = pMenu.add(Menu.NONE, 10, Menu.NONE, R.string.comment).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+			mCommentItem = item;
+			item.setActionView(R.layout.send_comment);
+			View sendCommentBtn = item.getActionView().findViewById(R.id.sendCommentBtn);
+			sendCommentBtn.setBackgroundDrawable(new ColoredFadeoutDrawable(COLORED_FADEOUT_COLOR));
+			sendCommentBtn.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					((ColoredFadeoutDrawable) v.getBackground()).startFadeout();
+					final EditText commentET = (EditText) mCommentItem.getActionView().findViewById(R.id.commentET);
+					final String update = commentET.getText().toString();
+					if (TextUtils.isEmpty(update)) {
+						Toast.makeText(getActivity().getApplicationContext(), "Cannot post a comment without text", Toast.LENGTH_LONG).show();
+					} else {
+						final ProgressDialog dialog = ProgressDialog.show(getActivity(), "Posting comment", "Please wait a moment...", true, false);
+						Threads.runOnNetworkThread(new Runnable() {
+							@Override
+							public void run() {
+								final boolean result = ((FacebookAccount) mMessage.account).postComment(mMessage, update);
+								Threads.runOnUIThread(new Runnable() {
+									@Override
+									public void run() {
+										dialog.dismiss();
+										if (result) {
+											updateComments();
+											commentET.setText("");
+											setCommenting(false);
+										} else {
+											Toast.makeText(getActivity().getApplicationContext(), "Failed to post comment", Toast.LENGTH_LONG).show();
+										}
+									}
+								});
+							}
+						});
+					}
+				}
+			});
 		}
 	}
 	
@@ -315,6 +316,7 @@ public class DetailsFragment extends SherlockFragment {
 			showLikes(null);
 			break;
 		case 5: // comment
+			setCommenting(true);
 			break;
 		case 6: // retweet
 			ComposeConfig config = new ComposeConfig(ComposeMode.TWITTER_RETWEET, mMessage.ID, mMessage.sender);
@@ -331,6 +333,18 @@ public class DetailsFragment extends SherlockFragment {
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * 
+	 * @return returns true when the back press was handled
+	 */
+	public boolean onBackPressed() {
+		if (isCommenting) {
+			setCommenting(false);
+			return true;
+		}
+		return false;
 	}
 	
 	private void setRefreshing(boolean v) {
@@ -501,7 +515,7 @@ public class DetailsFragment extends SherlockFragment {
 												mAttachmentsHolder.addView(iv);
 												ViewGroup.LayoutParams params = iv.getLayoutParams();
 												float ratio = (float)pBmd.getWidth() / (float)pBmd.getHeight();
-												params.width = LayoutParams.FILL_PARENT;
+												params.width = LayoutParams.MATCH_PARENT;
 												params.height = (int) (getResources().getDisplayMetrics().widthPixels / ratio);
 												iv.setLayoutParams(params);
 											}
