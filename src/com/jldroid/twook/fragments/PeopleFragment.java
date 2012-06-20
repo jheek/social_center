@@ -89,9 +89,28 @@ public class PeopleFragment extends SherlockFragment {
 	}
 	
 	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 1:
+			refreshFriends();
+			return true;
+		default:
+			return false;
+		}
+	}
+	
+	@Override
 	public void onStart() {
 		super.onStart();
 		getSherlockActivity().getSupportActionBar().setTitle(R.string.people);
+	}
+	
+	private void setRefreshing(boolean v) {
+		if (v) {
+			mRefreshItem.setActionView(R.layout.ab_progressbar);
+		} else {
+			mRefreshItem.setActionView(null);
+		}
 	}
 	
 	protected void populatePeople() {
@@ -99,7 +118,7 @@ public class PeopleFragment extends SherlockFragment {
 		mAccount = mAccountTabs.getSelectedAccounts().get(0);
 		if (mAccount instanceof FacebookAccount) {
 			final FacebookAccount fa = (FacebookAccount) mAccount;
-			mRefreshItem.setActionView(fa.isUpdatingFriends() ? new ProgressBar(getActivity()) : null);
+			setRefreshing(fa.isUpdatingFriends());
 			final SortedArrayList<User> friends = fa.getFriends();
 			mAdapter.add(getString(R.string.friends), new UserAdapter(getActivity(), friends));
 			if (friends.size() == 0) {
@@ -107,7 +126,7 @@ public class PeopleFragment extends SherlockFragment {
 			}
 		} else if (mAccount instanceof TwitterAccount) {
 			final TwitterAccount ta = (TwitterAccount) mAccount;
-			mRefreshItem.setActionView(ta.isUpdatingFriends() ? new ProgressBar(getActivity()) : null);
+			setRefreshing(ta.isUpdatingFriends());
 			mAdapter.add(getString(R.string.following), new UserAdapter(getActivity(), ta.getFollowing()));
 			mAdapter.add(getString(R.string.followers), new UserAdapter(getActivity(), ta.getFollowers()));
 			if (ta.getFollowers().size() == 0 && ta.getFollowing().size() == 0) {
@@ -117,14 +136,14 @@ public class PeopleFragment extends SherlockFragment {
 	}
 	
 	protected void refreshFriends() {
-		mRefreshItem.setActionView(new ProgressBar(getActivity()));
+		setRefreshing(true);
 		mAccount.updateFriends(new INetworkCallback() {
 			@Override
 			public void onSucceed(IAccount pAccount) {
 				Threads.runOnUIThread(new Runnable() {
 					@Override
 					public void run() {
-						mRefreshItem.setActionView(null);
+						setRefreshing(false);
 						mAdapter.notifyDataSetChanged();
 					}
 				});
@@ -141,7 +160,7 @@ public class PeopleFragment extends SherlockFragment {
 				Threads.runOnUIThread(new Runnable() {
 					@Override
 					public void run() {
-						mRefreshItem.setActionView(null);
+						setRefreshing(false);
 						Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.failed_update, Toast.LENGTH_LONG).show();
 					}
 				});
