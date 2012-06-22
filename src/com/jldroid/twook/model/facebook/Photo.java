@@ -4,8 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.jldroid.twook.model.Message;
 
@@ -23,6 +21,17 @@ public class Photo {
 	private Message mMessage;
 	
 	public Photo() {
+	}
+	
+	public Photo(FacebookAccount fa, Bundle bundle) {
+		facebookAccount = fa;
+		pid = bundle.getString("pid");
+		src = bundle.getString("src");
+		srcSmall = bundle.getString("srcSmall");
+		srcBig = bundle.getString("srcBig");
+		objectId = bundle.getLong("objectId");
+		created = bundle.getLong("created");
+		updated = bundle.getLong("updated");
 	}
 	
 	public Message peekMessage() {
@@ -60,6 +69,18 @@ public class Photo {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public Bundle asBundle() {
+		Bundle bundle = new Bundle(7);
+		bundle.putString("pid", pid);
+		bundle.putString("src", src);
+		bundle.putString("srcSmall", srcSmall);
+		bundle.putString("srcBig", srcBig);
+		bundle.putLong("objectId", objectId);
+		bundle.putLong("created", created);
+		bundle.putLong("updated", updated);
+		return bundle;
 	}
 	
 }

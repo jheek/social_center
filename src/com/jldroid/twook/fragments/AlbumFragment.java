@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.jdroid.utils.Threads;
 import com.jdroid.utils.StorageManager.StorageBundle;
 import com.jldroid.twook.R;
 import com.jldroid.twook.activities.AlbumActivity;
+import com.jldroid.twook.activities.DetailsActivity;
 import com.jldroid.twook.activities.MainActivity;
 import com.jldroid.twook.model.AccountsManager;
 import com.jldroid.twook.model.ImageManager;
@@ -47,6 +49,7 @@ public class AlbumFragment extends SherlockFragment implements OnItemClickListen
 	private MyAdapter mAdapter;
 	
 	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		mFBAccount = AccountsManager.getInstance(getActivity()).findFacebookAccountByID(getArguments().getLong(EXTRA_FB_ACCOUNT));
 		mAlbum = new Album(StorageBundle.create(getArguments().getByteArray(EXTRA_ALBUM)));
 	};
@@ -92,8 +95,9 @@ public class AlbumFragment extends SherlockFragment implements OnItemClickListen
 	
 	@Override
 	public void onItemClick(AdapterView<?> pParent, View pView, int pPosition, long pId) {
-		// TODO show photo in details
-		//((MainActivity) getActivity()).showFragment(new DetailsFragment(pPosition, ListUtils.makeList(mPhotos)));
+		getActivity().startActivity(new Intent(getActivity(), DetailsActivity.class)
+			.putExtra(DetailsFragment.EXTRA_ACCOUNT, mFBAccount.getUser().id)
+			.putExtra(DetailsFragment.EXTRA_PHOTO, mPhotos[pPosition].asBundle()));
 	}
 	
 	private void loadPhotos() {

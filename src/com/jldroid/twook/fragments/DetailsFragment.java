@@ -7,33 +7,22 @@ import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.PixelFormat;
-import android.graphics.PixelXorXfermode;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.Xfermode;
-import android.graphics.Paint.Align;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
-import android.view.inputmethod.EditorInfo;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -48,19 +37,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.jdroid.utils.StorageManager.StorageBundle;
 import com.jdroid.utils.Threads;
 import com.jdroid.utils.TimeUtils;
 import com.jldroid.twook.R;
 import com.jldroid.twook.activities.ComposeActivity;
-import com.jldroid.twook.activities.DetailsActivity;
-import com.jldroid.twook.activities.MainActivity;
-import com.jldroid.twook.activities.ViewProfileActivity;
+import com.jldroid.twook.activities.ViewImageActivity;
 import com.jldroid.twook.fragments.ComposeFragment.ComposeConfig;
 import com.jldroid.twook.fragments.ComposeFragment.ComposeMode;
 import com.jldroid.twook.model.AccountsManager;
@@ -73,6 +58,7 @@ import com.jldroid.twook.model.User;
 import com.jldroid.twook.model.facebook.Comment;
 import com.jldroid.twook.model.facebook.FacebookAccount;
 import com.jldroid.twook.model.facebook.FacebookImage;
+import com.jldroid.twook.model.facebook.Photo;
 import com.jldroid.twook.view.ColoredFadeoutDrawable;
 import com.jldroid.twook.view.CommentView;
 import com.jldroid.twook.view.ProfileImageDrawable;
@@ -80,7 +66,9 @@ import com.jldroid.twook.view.UserAdapter;
 
 public class DetailsFragment extends SherlockFragment {
 
+	public static final String EXTRA_ACCOUNT = "com.jldroid.twook.ACCOUNT";
 	public static final String EXTRA_MSG = "com.jldroid.twook.MSG";
+	public static final String EXTRA_PHOTO = "com.jldroid.twook.PHOTO";
 	
 	private static final int COLORED_FADEOUT_COLOR = 0xff008FD5;
 	
@@ -101,6 +89,7 @@ public class DetailsFragment extends SherlockFragment {
 	private ProfileImageDrawable mProfileDrawable;
 	
 	private Message mMessage;
+	private Photo mPhoto;
 	
 	private MyAdapter mAdapter;
 	
@@ -114,8 +103,11 @@ public class DetailsFragment extends SherlockFragment {
 	@Override
 	public void onCreate(Bundle pSavedInstanceState) {
 		super.onCreate(pSavedInstanceState);
-		mMessage = Message.findMessage(getActivity(), getArguments().getBundle(EXTRA_MSG));
-		if (mMessage == null) {
+		AccountsManager am = AccountsManager.getInstance(getActivity());
+		IAccount account = getArguments().containsKey(EXTRA_ACCOUNT) ? am.findAccount(getArguments().getLong(EXTRA_ACCOUNT)) : null;
+		mMessage = getArguments().containsKey(EXTRA_MSG) ? Message.findMessage(getActivity(), getArguments().getBundle(EXTRA_MSG)) : null;
+		mPhoto = getArguments().containsKey(EXTRA_PHOTO) ? new Photo((FacebookAccount) account, getArguments().getBundle(EXTRA_PHOTO)) : null;
+		if (mMessage == null && mPhoto == null) {
 			getActivity().finish();
 		}
 	}
@@ -139,35 +131,6 @@ public class DetailsFragment extends SherlockFragment {
 		
 		mProfileDrawable = new ProfileImageDrawable(getActivity());
 		mProfileIV.setBackgroundDrawable(mProfileDrawable);
-		return v;
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle pSavedInstanceState) {
-		super.onActivityCreated(pSavedInstanceState);
-		setHasOptionsMenu(true);
-		if (mMessage.sender != null) {
-			mSenderTV.setText(mMessage.getTitle(getActivity()));
-		} else {
-			mSenderTV.setVisibility(View.GONE);
-		}
-		
-		mAdapter = new MyAdapter();
-		mListView.addHeaderView(mHeader);
-		mListView.setAdapter(mAdapter);
-
-		boolean isFacebookPhoto = mMessage.type == Message.TYPE_FACEBOOK_PHOTO;
-		
-		if (mMessage.isTwitter()) {
-			mAttachmentsHolder.setVisibility(View.GONE);
-		} else if (mMessage.isFacebook()) {
-			
-			if (isFacebookPhoto) {
-				mMessageBox.setVisibility(View.GONE);
-				mHeader.removeView(mAttachmentsHolder);
-				mHeader.addView(mAttachmentsHolder, 0);
-			}
-		}
 		
 		mProfileIV.setOnClickListener(new OnClickListener() {
 			@Override
@@ -175,11 +138,6 @@ public class DetailsFragment extends SherlockFragment {
 				AccountsManager.viewProfile(getActivity(), mMessage.account, mMessage.sender);
 			}
 		});
-		
-		updateAll();
-		if (mMessage.isDirty || (mMessage.comments != null && mMessage.comments.getAvailableCount() != mMessage.comments.getRealCount())) {
-			refresh();
-		}
 		
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -206,6 +164,46 @@ public class DetailsFragment extends SherlockFragment {
 				}
 			}
 		});
+		
+		return v;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle pSavedInstanceState) {
+		super.onActivityCreated(pSavedInstanceState);
+		setHasOptionsMenu(true);
+		
+		mAdapter = new MyAdapter();
+		mListView.addHeaderView(mHeader);
+		mListView.setAdapter(mAdapter);
+
+		if (mMessage != null) {
+			updateAll();
+			if (mMessage.isDirty || (mMessage.comments != null && mMessage.comments.getAvailableCount() != mMessage.comments.getRealCount())) {
+				refresh();
+			}
+		} else if (mPhoto != null) {
+			final ProgressDialog prog = ProgressDialog.show(getActivity(), getString(R.string.pb_title_loading), getString(R.string.pb_msg_please_wait), true, false);
+			Threads.runOnNetworkThread(new Runnable() {
+				@Override
+				public void run() {
+					final Message msg = mPhoto.loadMessage();
+					prog.dismiss();
+					Threads.runOnUIThread(new Runnable() {
+						@Override
+						public void run() {
+							if (msg != null) {
+								mMessage = msg;
+								updateAll();
+							} else {
+								Toast.makeText(getActivity().getApplicationContext(), R.string.failed_load_photo, Toast.LENGTH_LONG).show();
+								getActivity().finish();
+							}
+						}
+					});
+				}
+			});
+		}
 	}
 	
 	@Override
@@ -228,6 +226,9 @@ public class DetailsFragment extends SherlockFragment {
 	@Override
 	public void onCreateOptionsMenu(Menu pMenu, MenuInflater pInflater) {
 		super.onCreateOptionsMenu(pMenu, pInflater);
+		if (mMessage == null) {
+			return;
+		}
 		if (!isCommenting) {
 			pMenu.add(Menu.NONE, 1, Menu.NONE, R.string.share).setIcon(R.drawable.details_share).setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
 			if (mMessage.isFacebook()) {
@@ -450,6 +451,7 @@ public class DetailsFragment extends SherlockFragment {
 	}
 	
 	protected void updateAll() {
+		getSherlockActivity().invalidateOptionsMenu();
 		updateBasics();
 		updateLikes();
 		updateComments();
@@ -461,14 +463,26 @@ public class DetailsFragment extends SherlockFragment {
 	}
 	
 	protected void updateBasics() {
+		mSenderTV.setVisibility(mMessage.sender != null ? View.VISIBLE : View.GONE);
 		if (mMessage.sender != null) {
+			mSenderTV.setText(mMessage.getTitle(getActivity()));
 			mProfileDrawable.setUser(getActivity(), mMessage.sender, false);
-			mMsgTV.setText(mMessage.getBody());
-			mMsgTV.setMovementMethod(LinkMovementMethod.getInstance());
-			if (!TextUtils.isEmpty(mMessage.source)) {
-				mInfoTV.setText( TimeUtils.parseDuration(System.currentTimeMillis() - mMessage.createdTime, true) + " via " + mMessage.source);
-			} else {
-				mInfoTV.setText( TimeUtils.parseDuration(System.currentTimeMillis() - mMessage.createdTime, true) );
+		}
+		mMsgTV.setText(mMessage.getBody());
+		mMsgTV.setMovementMethod(LinkMovementMethod.getInstance());
+		if (!TextUtils.isEmpty(mMessage.source)) {
+			mInfoTV.setText( TimeUtils.parseDuration(System.currentTimeMillis() - mMessage.createdTime, true) + getString(R.string.via) + mMessage.source);
+		} else {
+			mInfoTV.setText( TimeUtils.parseDuration(System.currentTimeMillis() - mMessage.createdTime, true) );
+		}
+		
+		if (mMessage.isTwitter()) {
+			mAttachmentsHolder.setVisibility(View.GONE);
+		} else if (mMessage.isFacebook()) {
+			if (mMessage.type == Message.TYPE_FACEBOOK_PHOTO) {
+				mMessageBox.setVisibility(View.GONE);
+				mHeader.removeView(mAttachmentsHolder);
+				mHeader.addView(mAttachmentsHolder, 0);
 			}
 		}
 	}
@@ -498,7 +512,7 @@ public class DetailsFragment extends SherlockFragment {
 								public void onFailed(String pUri) {}
 								
 								@Override
-								public void onBitmapLoaded(String pUri, final Bitmap pBmd) {
+								public void onBitmapLoaded(final String pUri, final Bitmap pBmd) {
 									Threads.runOnUIThread(new Runnable() {
 										public void run() {
 											if (getActivity() != null) {
@@ -508,7 +522,7 @@ public class DetailsFragment extends SherlockFragment {
 												iv.setOnClickListener(new OnClickListener() {
 													@Override
 													public void onClick(View pV) {
-														startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(img.href)).setType("image/*"));
+														startActivity(new Intent(getActivity(), ViewImageActivity.class).putExtra(ViewImageFragment.EXTRA_IMG_URL, pUri));
 													}
 												});
 												iv.setImageBitmap(pBmd);
@@ -611,7 +625,7 @@ public class DetailsFragment extends SherlockFragment {
 
 		@Override
 		public int getCount() {
-			return mMessage.comments != null ? mMessage.comments.getAvailableCount() : 0;
+			return mMessage != null && mMessage.comments != null ? mMessage.comments.getAvailableCount() : 0;
 		}
 
 		@Override

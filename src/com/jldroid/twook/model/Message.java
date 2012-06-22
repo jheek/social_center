@@ -258,6 +258,9 @@ public final class Message implements Comparable<Message> {
 	}
 	
 	public CharSequence getBody() {
+		if (text == null) {
+			return "";
+		}
 		if (mSpannable == null || !mSpannable.toString().equals(text)) {
 			mSpannable = new SpannableString(text);
 			Linkify.addLinks(mSpannable, Linkify.EMAIL_ADDRESSES|Linkify.WEB_URLS);
