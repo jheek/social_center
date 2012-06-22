@@ -111,7 +111,7 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 		pMenu.add(Menu.NONE, 8, Menu.NONE, R.string.people).setIcon(R.drawable.actionbar_people).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		pMenu.add(Menu.NONE, 9, Menu.NONE, R.string.columns);
 		pMenu.add(Menu.NONE, 3, Menu.NONE, R.string.settings);
-		pMenu.add(Menu.NONE, 4, Menu.NONE, R.string.setup); // TODO remove
+		//pMenu.add(Menu.NONE, 4, Menu.NONE, R.string.setup); // TODO remove
 		pMenu.add(Menu.NONE, 5, Menu.NONE, R.string.donate);
 
 		if (mViewPager.getCurrentItem() >= 0 && mViewPager.getCurrentItem() < mCM.getEnabledColumnCount()) {

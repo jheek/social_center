@@ -1,46 +1,21 @@
 package com.jldroid.twook.activities;
 
-import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore.Images.Media;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
-import android.support.v4.app.FragmentTransaction;
-import android.widget.ArrayAdapter;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
-import com.jldroid.twook.Globals;
-import com.jldroid.twook.R;
-import com.jldroid.twook.ThemeUtils;
-import com.jldroid.twook.fragments.ChatFragment;
-import com.jldroid.twook.fragments.ChatsFragment;
-import com.jldroid.twook.fragments.ComposeFragment;
-import com.jldroid.twook.fragments.ComposeFragment.ComposeConfig;
-import com.jldroid.twook.fragments.ComposeFragment.ComposeMode;
-import com.jldroid.twook.fragments.DetailsFragment;
-import com.jldroid.twook.fragments.MainPhoneFragment;
-import com.jldroid.twook.fragments.PeopleFragment;
-import com.jldroid.twook.model.AccountsManager;
-import com.jldroid.twook.model.Chat;
-import com.jldroid.twook.model.ColumnInfo;
-import com.jldroid.twook.model.ColumnManager;
-import com.jldroid.twook.model.IAccount;
-import com.jldroid.twook.model.ImageManager;
-import com.jldroid.twook.model.Message;
-import com.jldroid.twook.model.SyncManager;
-import java.util.ArrayList;
-import com.jdroid.utils.SortedArrayList;
 import com.jdroid.utils.StorageManager;
+import com.jldroid.twook.Globals;
+import com.jldroid.twook.ThemeUtils;
+import com.jldroid.twook.fragments.MainPhoneFragment;
+import com.jldroid.twook.model.AccountsManager;
+import com.jldroid.twook.model.ColumnManager;
+import com.jldroid.twook.model.ImageManager;
+import com.jldroid.twook.model.SyncManager;
 
 public class MainActivity extends SherlockFragmentActivity {
 	

@@ -30,7 +30,6 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.jdroid.utils.Threads;
 import com.jldroid.twook.R;
-import com.jldroid.twook.activities.MainActivity;
 import com.jldroid.twook.model.AccountsManager;
 import com.jldroid.twook.model.IAccount;
 import com.jldroid.twook.model.ImageManager;
@@ -38,12 +37,9 @@ import com.jldroid.twook.model.ImageManager.DeletionTrigger;
 import com.jldroid.twook.model.ImageManager.LoadBitmapCallback;
 import com.jldroid.twook.model.User;
 import com.jldroid.twook.model.facebook.FacebookAccount;
-import com.jldroid.twook.model.facebook.FacebookUserProvider;
 import com.jldroid.twook.model.twitter.TwitterAccount;
-import com.jldroid.twook.model.twitter.TwitterUserProvider;
 import com.jldroid.twook.view.AlbumsView;
 import com.jldroid.twook.view.ColumnView;
-import com.jldroid.twook.view.UnderlineDrawable;
 
 public class ViewProfileFragment extends SherlockFragment implements OnPageChangeListener, OnClickListener, TabListener {
 	
@@ -76,8 +72,6 @@ public class ViewProfileFragment extends SherlockFragment implements OnPageChang
 	private MyAdapter mAdapter;
 	
 	private View[] mViews;
-	
-	private UnderlineDrawable mButtonUnderlineDrawable;
 	
 	protected Bitmap mProfileBmd;
 	
@@ -112,8 +106,6 @@ public class ViewProfileFragment extends SherlockFragment implements OnPageChang
 		mInfoPB = (ProgressBar) mInfoView.findViewById(R.id.progressBar);
 		mInfoProfileView = (ImageView) mInfoView.findViewById(R.id.profileIV);
 		mInfoNameTV = (TextView) mInfoView.findViewById(R.id.nameTV);
-		
-		mButtonUnderlineDrawable = new UnderlineDrawable((int) (getActivity().getResources().getDisplayMetrics().density * 5), 0xFF99CC00);
 		
 		return v;
 	}
@@ -361,7 +353,7 @@ public class ViewProfileFragment extends SherlockFragment implements OnPageChang
 			
 			table.addView(row);
 			TableLayout.LayoutParams params2 = (TableLayout.LayoutParams) row.getLayoutParams();
-			params2.width = LayoutParams.FILL_PARENT;
+			params2.width = LayoutParams.MATCH_PARENT;
 			row.setLayoutParams(params2);
 		}
 	}

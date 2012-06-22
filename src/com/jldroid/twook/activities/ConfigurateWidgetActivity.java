@@ -1,11 +1,10 @@
 package com.jldroid.twook.activities;
 
-import android.app.ListActivity;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Build.VERSION;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,12 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListActivity;
+import com.jdroid.utils.StorageManager;
 import com.jldroid.twook.R;
 import com.jldroid.twook.ThemeUtils;
 import com.jldroid.twook.model.ColumnInfo;
 import com.jldroid.twook.model.ColumnManager;
 import com.jldroid.twook.widget.ColumnWidgetProvider;
-import com.jdroid.utils.StorageManager;
 
 public class ConfigurateWidgetActivity extends SherlockListActivity {
 	

@@ -1,9 +1,5 @@
 package com.jldroid.twook.fragments;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,16 +14,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.jdroid.utils.ListUtils;
-import com.jdroid.utils.Threads;
 import com.jdroid.utils.StorageManager.StorageBundle;
+import com.jdroid.utils.Threads;
 import com.jldroid.twook.R;
-import com.jldroid.twook.activities.AlbumActivity;
 import com.jldroid.twook.activities.DetailsActivity;
-import com.jldroid.twook.activities.MainActivity;
 import com.jldroid.twook.model.AccountsManager;
 import com.jldroid.twook.model.ImageManager;
-import com.jldroid.twook.model.Message;
 import com.jldroid.twook.model.facebook.Album;
 import com.jldroid.twook.model.facebook.FacebookAccount;
 import com.jldroid.twook.model.facebook.Photo;

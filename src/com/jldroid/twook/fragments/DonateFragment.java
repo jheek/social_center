@@ -30,8 +30,6 @@ public class DonateFragment extends SherlockListFragment implements OnItemClickL
 	private PurchaseObserver mObserver;
 	
 	private BillingService mService;
-
-	private MyAdapter mAdapter;
 	
     /** An array of product list entries for the products that can be purchased. */
     private static final CatalogEntry[] CATALOG = new CatalogEntry[] {
@@ -60,7 +58,7 @@ public class DonateFragment extends SherlockListFragment implements OnItemClickL
 			return;
 		}
 		
-		getListView().setAdapter(mAdapter = new MyAdapter());
+		getListView().setAdapter(new MyAdapter());
 		getListView().setOnItemClickListener(this);
 	}
 	

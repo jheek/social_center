@@ -3,8 +3,6 @@ package com.jldroid.twook.activities;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
-import com.jldroid.twook.R;
-import com.jldroid.twook.fragments.ChatsFragment;
 import com.jldroid.twook.fragments.ComposeFragment;
 
 public class ComposeActivity extends SingleSherlockFragmentActivity {
