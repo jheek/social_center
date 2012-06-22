@@ -53,8 +53,7 @@
     
     <!-- album -->
     <string name="failed_load_comments_likes">Failed to load photo comments and likes</string>
-    <string name="failed_load_photos">Error cannot add facebook account.</string>
-    <string name="adding_fb_dialog_title">Adding Facebook account</string>
+    <string name="failed_load_photos">Failed to load photos</string>
     
     <!-- details  -->
     <string name="details">Details</string>
@@ -66,6 +65,7 @@
     <string name="retweet">Retweet</string>
     <string name="comment">Comment</string>
     <string name="favorite">Favorite</string>
+    <string name="via">via</string>
     
     <!-- donation -->
     <string name="donation_100">1 euro donation</string>
@@ -208,6 +208,8 @@
     <!-- settings -->
     <string name="settings">Settings</string>
     
+    <!-- image view -->
+    <string name="failed_load_photo">Failed to load photo</string>
     
     <string-array name="account_sync_intervals">
         <item>Default</item>
