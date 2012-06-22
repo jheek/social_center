@@ -6,16 +6,12 @@ import java.util.HashMap;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
@@ -117,23 +113,10 @@ public class ColumnsActivity extends SherlockPreferenceActivity implements OnCol
 			for (int i = 0; i < columns.size(); i++) {
 				final ColumnInfo info = columns.get(i);
 				ColumnMessagesProvider provider = info.getProvider();
-				final OnCheckedChangeListener listener = new OnCheckedChangeListener() {
-					@Override
-					public void onCheckedChanged(CompoundButton pButtonView, boolean pIsChecked) {
-						cm.setColumnEnabled(info, pIsChecked);
-					}
-				};
-				CheckBoxPreference pref = new CheckBoxPreference(this) {
-					@Override
-					protected void onBindView(View pView) {
-						super.onBindView(pView);
-						findCheckBoxAndSetListener(pView, listener);
-					}
-				};
+				Preference pref = new Preference(this);
 				pref.setPersistent(false);
 				pref.setTitle(provider.getName(this));
 				pref.setSummary(provider.getDescription(this));
-				pref.setChecked(info.isEnabled());
 				pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 					@Override
 					public boolean onPreferenceClick(Preference pPreference) {
@@ -147,24 +130,6 @@ public class ColumnsActivity extends SherlockPreferenceActivity implements OnCol
 				group.addPreference(pref);
 			}
 		}
-	}
-	
-	protected static boolean findCheckBoxAndSetListener(View v, OnCheckedChangeListener listener) {
-		if (v instanceof CheckBox) {
-			CheckBox cb = (CheckBox) v;
-			cb.setOnCheckedChangeListener(listener);
-			cb.setClickable(true);
-			return true;
-		} 
-		if (v instanceof ViewGroup) {
-			ViewGroup vg = (ViewGroup) v;
-			for (int i = 0; i < vg.getChildCount(); i++) {
-				if (findCheckBoxAndSetListener(vg.getChildAt(i), listener)) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 	
 	protected static boolean findTextViewAndSetIcon(Preference pref, View v, int icon) {

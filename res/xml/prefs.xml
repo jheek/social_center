@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 	
     <PreferenceCategory android:key="basic" android:title="Basic">
-        <Preference android:title="Columns" android:summary="Enable/Disable columns and edit column settings" android:key="columns"/>
+        <Preference android:title="Columns" android:summary="Edit column settings" android:key="columns"/>
         <ListPreference android:title="Notifications" android:persistent="false" android:summary="Default notification behaviour" android:key="defaultNotification" android:entries="@array/default_notifications" android:dialogTitle="Notifications" android:entryValues="@array/default_notification_values"/>
         <ListPreference android:title="Default update interval" android:persistent="false" android:entries="@array/default_sync_intervals" android:dialogTitle="Defalut update interval" android:key="defaultSyncInterval" android:entryValues="@array/default_sync_interval_values" android:summary="Amount of time between each update"/>
         <!-- 

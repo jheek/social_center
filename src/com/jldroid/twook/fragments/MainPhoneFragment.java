@@ -3,12 +3,13 @@ package com.jldroid.twook.fragments;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -108,6 +109,7 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 		pMenu.add(Menu.NONE, 6, Menu.NONE, R.string.compose).setIcon(R.drawable.actionbar_compose).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		pMenu.add(Menu.NONE, 7, Menu.NONE, R.string.chat).setIcon(R.drawable.actionbar_chat).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		pMenu.add(Menu.NONE, 8, Menu.NONE, R.string.people).setIcon(R.drawable.actionbar_people).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		pMenu.add(Menu.NONE, 9, Menu.NONE, R.string.columns);
 		pMenu.add(Menu.NONE, 3, Menu.NONE, R.string.settings);
 		pMenu.add(Menu.NONE, 4, Menu.NONE, R.string.setup); // TODO remove
 		pMenu.add(Menu.NONE, 5, Menu.NONE, R.string.donate);
@@ -166,12 +168,34 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 		case 8: // people
 			a.startActivity(new Intent(a.getApplicationContext(), PeopleActivity.class));
 			break;
+		case 9: // columns
+			showSelectColumnsDialog();
+			break;
 		default:
 			break;
 		}
 		return true;
 	}
 	
+	private void showSelectColumnsDialog() {
+		final int l = mCM.getColumnCount();
+		String[] columnNames = new String[l];
+		boolean[] enabledColumns = new boolean[l];
+		for (int i = 0; i < l; i++) {
+			ColumnInfo info = mCM.getColumnInfo(i);
+			columnNames[i] = info.getProvider().getName(getActivity());
+			enabledColumns[i] = info.isEnabled();
+		}
+		new Builder(getActivity())
+			.setTitle(R.string.select_columns)
+			.setMultiChoiceItems(columnNames, enabledColumns, new OnMultiChoiceClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+					mCM.setColumnEnabled(mCM.getColumnInfo(which), isChecked);
+				}
+			}).show();
+	}
+
 	public void setColumn(Context c, String storageName) {
 		if (getActivity() == null || mViewPager == null) {
 			return;
@@ -227,13 +251,23 @@ public class MainPhoneFragment extends SherlockFragment implements OnPageChangeL
 	
 	@Override
 	public void onColumnsChanged() {
-		getSherlockActivity().getSupportActionBar().removeAllTabs();
+		ActionBar ab = getSherlockActivity().getSupportActionBar();
+		int enabledColumnCount = mCM.getEnabledColumnCount();
+		int tabCount = ab.getNavigationItemCount();
+		while (enabledColumnCount < tabCount) {
+			tabCount--;
+			ab.removeTabAt(tabCount);
+		}
 		for (int i = 0; i < mCM.getEnabledColumnCount(); i++) {
 			ColumnInfo info = mCM.getEnabledColumnInfo(i);
-			Tab tab = getSherlockActivity().getSupportActionBar().newTab();
+			Tab tab = i < tabCount ? ab.getTabAt(i) : null;
+			boolean isAdded = tab != null;
+			if (tab == null) tab = ab.newTab();
 			tab.setText(info.getProvider().getName(getActivity()));
 			tab.setTabListener(this);
-			getSherlockActivity().getSupportActionBar().addTab(tab);
+			if (!isAdded) {
+				ab.addTab(tab);
+			}
 		}
 		mAdapter.notifyDataSetChanged();
 	}
