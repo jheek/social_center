@@ -443,13 +443,13 @@ public class ComposeFragment extends SherlockFragment {
 							ArrayList<User> following = ta.getFollowing();
 							for (int i2 = followers.size() - 1; i2 >= 0; i2--) {
 								User user = followers.get(i2);
-								if (user.twitterScreenName.toLowerCase().startsWith(filter) && !items.contains(user)) {
+								if ((user.twitterScreenName.toLowerCase().startsWith(filter) || user.name.toLowerCase().startsWith(filter)) && !items.contains(user)) {
 									items.add(user);
 								}
 							}
 							for (int i2 = following.size() - 1; i2 >= 0; i2--) {
 								User user = following.get(i2);
-								if (user.twitterScreenName.toLowerCase().startsWith(filter) && !items.contains(user)) {
+								if ((user.twitterScreenName.toLowerCase().startsWith(filter) || user.name.toLowerCase().startsWith(filter)) && !items.contains(user)) {
 									items.add(user);
 								}
 							}
