@@ -135,7 +135,7 @@ public class User implements Comparable<User> {
 	@Override
 	public String toString() {
 		if (type == TYPE_TWITTER) {
-			return '@' + name;
+			return '@' + twitterScreenName;
 		} else {
 			return name;
 		}

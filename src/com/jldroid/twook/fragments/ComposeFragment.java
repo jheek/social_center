@@ -36,7 +36,6 @@ import com.jdroid.utils.SortedArrayList;
 import com.jdroid.utils.StorageManager.StorageBundle;
 import com.jldroid.twook.R;
 import com.jldroid.twook.activities.ComposeActivity;
-import com.jldroid.twook.activities.MainActivity;
 import com.jldroid.twook.model.IAccount;
 import com.jldroid.twook.model.PendingPost;
 import com.jldroid.twook.model.PendingPostManager;
@@ -239,8 +238,7 @@ public class ComposeFragment extends SherlockFragment {
 					ppm.add(post);
 				}
 			}
-			MainActivity a = (MainActivity) getActivity();
-			a.onBackPressed();
+			getActivity().onBackPressed();
 		} else {
 			Toast.makeText(getActivity().getApplicationContext(), R.string.update_cannot_be_empty, Toast.LENGTH_LONG).show();
 		}
@@ -445,13 +443,13 @@ public class ComposeFragment extends SherlockFragment {
 							ArrayList<User> following = ta.getFollowing();
 							for (int i2 = followers.size() - 1; i2 >= 0; i2--) {
 								User user = followers.get(i2);
-								if (user.name.toLowerCase().startsWith(filter) && !items.contains(user)) {
+								if (user.twitterScreenName.toLowerCase().startsWith(filter) && !items.contains(user)) {
 									items.add(user);
 								}
 							}
 							for (int i2 = following.size() - 1; i2 >= 0; i2--) {
 								User user = following.get(i2);
-								if (user.name.toLowerCase().startsWith(filter) && !items.contains(user)) {
+								if (user.twitterScreenName.toLowerCase().startsWith(filter) && !items.contains(user)) {
 									items.add(user);
 								}
 							}
