@@ -79,6 +79,9 @@
             android:name=".activities.AlbumActivity">
         </activity>
         <activity
+            android:name=".activities.ViewImageActivity">
+        </activity>
+        <activity
             android:name=".activities.ComposeActivity">
              <intent-filter>
                 <action android:name="android.intent.action.SEND" />
