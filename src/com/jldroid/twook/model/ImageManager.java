@@ -9,6 +9,10 @@ import java.io.InputStream;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -442,30 +446,27 @@ public class ImageManager {
 		}
 		
 		private Bitmap downloadBitmap() {
-			HttpGet request = new HttpGet(mUri);
-			DefaultHttpClient client = new DefaultHttpClient();
+			InputStream is = null;
 			FastBufferedInputStream fbis = sBufStreamPool.get();
-		    try {
-		        HttpResponse response = client.execute(request);
-		        
-		        final HttpEntity entity = response.getEntity();
-		        if (entity != null) {
-		            InputStream inputStream = null;
-		            try {
-		                inputStream = entity.getContent(); 
-		                fbis.setInputStream(inputStream);
-		                return BitmapFactory.decodeStream(fbis);
-		            } finally {
-		                if (inputStream != null) {
-		                	fbis.close();
-		                }
-		                entity.consumeContent();
-		            }
-		        }
-		    } catch (Exception e) {
-		        request.abort();
-		        Log.w("ImageDownloader", "Error while retrieving bitmap from " + mUri);
-		    }
+			URLConnection conn = null;
+			try {
+				conn = new URL(mUri).openConnection();
+				is = conn.getInputStream();
+				if (is != null) {
+					fbis.setInputStream(conn.getInputStream());
+					return BitmapFactory.decodeStream(fbis, null, sNetworkDecodingOptions);
+				}
+			} catch (IOException e1) {
+				Log.w("ImageDownloader", "Error while retrieving bitmap from " + mUri);
+			} finally {
+				if (is != null) {
+					try {
+						fbis.close();
+					} catch (IOException e) {
+					}
+					is = null;
+				}
+			}
 		    return null;
 		}
 		
