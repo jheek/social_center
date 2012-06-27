@@ -4,13 +4,13 @@
     <style name="Spinner.Light" parent="@android:style/Widget.Spinner">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">40dp</item>
-        <item name="android:background">@drawable/button_selector</item>
+        <item name="android:background">@drawable/spinner_background_ab_example</item>
     </style>
 
     <style name="Spinner.Dark" parent="@android:style/Widget.Spinner">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">40dp</item>
-        <item name="android:background">@drawable/button_selector</item>
+        <item name="android:background">@drawable/spinner_background_ab_example</item>
     </style>
 
     <style name="Button.Light" parent="@android:style/Widget.Button">
@@ -32,7 +32,7 @@
     <style name="ListView.Light" parent="@android:style/Widget.ListView">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:listSelector">@drawable/list_selector</item>
+        <item name="android:listSelector">@drawable/selectable_background_example</item>
         <item name="android:dividerHeight">1px</item>
         <item name="android:cacheColorHint">#FFF</item>
         <item name="android:divider">#BBBBBB</item>
@@ -41,7 +41,7 @@
     <style name="ListView.Dark" parent="@android:style/Widget.ListView">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:listSelector">@drawable/list_selector</item>
+        <item name="android:listSelector">@drawable/selectable_background_example</item>
         <item name="android:dividerHeight">1px</item>
         <item name="android:cacheColorHint">#000</item>
         <item name="android:divider">#BBBBBB</item>
@@ -170,8 +170,8 @@
 
     
        <style name="customActionTabStyle" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-            <item name="background">@drawable/abs__tab_indicator_ab_holo</item>
-            <item name="android:background">@drawable/abs__tab_indicator_ab_holo</item>
+            <item name="background">@drawable/tab_indicator_ab_example</item>
+            <item name="android:background">@drawable/tab_indicator_ab_example</item>
         </style>
     
        
@@ -183,7 +183,7 @@
        
        <style name="Widget.Sherlock.ActionBar.TabView" parent="Widget">
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:background">@drawable/abs__tab_indicator_ab_holo</item>
+        <item name="android:background">@drawable/tab_indicator_ab_example</item>
         <item name="android:paddingLeft">16dip</item>
         <item name="android:paddingRight">16dip</item>
     </style>
@@ -195,6 +195,7 @@
     <style name="Widget.Sherlock.ActionBar.TabBar" parent="Widget">
         <item name="android:divider">?attr/actionBarDivider</item>
         <item name="android:showDividers">middle</item>
+        <item name="android:background">#262626</item>
         <item name="android:dividerPadding">12dip</item>
     </style>
     <style name="Widget.Sherlock.Light.ActionBar.TabBar" parent="Widget.Sherlock.ActionBar.TabBar">

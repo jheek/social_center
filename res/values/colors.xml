@@ -10,6 +10,6 @@
      <color name="ics_dark_orange">#FF8800</color> 
     <color name="ics_light_grey">#E5E5E5</color>
     <color name="background">#FFFFFF</color> 
-    
+       <color name="pressed_example">#CC4695ce</color>
          
 </resources>

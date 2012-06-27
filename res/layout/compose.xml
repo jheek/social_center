@@ -19,7 +19,10 @@
 	        android:gravity="top"
 	     android:background="@drawable/edit_text_holo_light"
 	     android:textColor="#000000"
-	        android:hint="What's happening?">
+	        android:hint="What's happening?"
+	        
+	        android:completionHintView="@layout/completion_hint_view"
+	        >
 	    </AutoCompleteTextView>
 	
 	    <LinearLayout
