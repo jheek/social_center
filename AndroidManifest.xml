@@ -7,7 +7,7 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="14" />
+        android:targetSdkVersion="16" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -175,7 +175,6 @@
                 <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-        <activity android:name=".activities.SearchActivity" android:configChanges="mcc|mnc|keyboard|keyboardHidden|orientation|uiMode|screenSize"></activity>
     </application>
 
 </manifest>
