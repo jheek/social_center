@@ -104,6 +104,10 @@ public final class Message implements Comparable<Message> {
 	public int[] mentionStarts;
 	public int[] mentionEnds;
 	
+	private CharSequence mTitle;
+	private CharSequence mInfo;
+	private StringBuilder mTime = new StringBuilder();
+	
 	public Message() {
 	}
 	
@@ -189,56 +193,60 @@ public final class Message implements Comparable<Message> {
 		}
 	}
 	
-	private static final StringBuilder sSB = new StringBuilder(48);
-	
 	private static final int MAX_RECIPIENTS = 3;
 	
-	public String getTitle(Context c) {
+	public CharSequence getTitle(Context c) {
+		if (mTitle != null) {
+			return mTitle;
+		}
 		if (recipients != null) {
-			sSB.setLength(0);
+			StringBuilder sb = new StringBuilder(64);
 			int count = 0;
 			for (int i = 0; i < recipients.length; i++) {
 				if (recipients[i].id != account.getUser().id) {
 					if (count + 1 == MAX_RECIPIENTS) {
-						sSB.append(' ');
-						sSB.append(c.getString(R.string.summation_last));
-						sSB.append(' ');
+						sb.append(' ');
+						sb.append(c.getString(R.string.summation_last));
+						sb.append(' ');
 					} else if (count != 0) {
-						sSB.append(c.getString(R.string.summation));
-						sSB.append(' ');
+						sb.append(c.getString(R.string.summation));
+						sb.append(' ');
 					}
-					sSB.append(recipients[i].name);
+					sb.append(recipients[i].name);
 					count++;
 					if (count + 1 == MAX_RECIPIENTS && recipients.length - i > 2) {
-						sSB.append(' ');
-						sSB.append(c.getString(R.string.summation_last));
-						sSB.append(' ');
+						sb.append(' ');
+						sb.append(c.getString(R.string.summation_last));
+						sb.append(' ');
 						int numOthers = 0;
 						for (int i2 = i + 1; i2 < recipients.length; i2++) {
 							if (recipients[i2].id != account.getUser().id) {
 								numOthers++;
 							}
 						}
-						sSB.append(numOthers == 1 ? c.getString(R.string.summation_other) : c.getString(R.string.summation_others, numOthers));
+						sb.append(numOthers == 1 ? c.getString(R.string.summation_other) : c.getString(R.string.summation_others, numOthers));
 						break;
 					} else if (count == MAX_RECIPIENTS) {
 						break;
 					}
 				}
 			}
-			return sSB.toString();
+			mTitle = sb;
+			return sb;
 		} else if (target != null) {
-			return c.getString(R.string.msg_to, sender.name, target.name);
+			return mTitle = c.getString(R.string.msg_to, sender.name, target.name);
 		} else {
-			return sender.name;
+			return mTitle = sender.name;
 		}
 	}
 	
-	public String getInfo() {
+	public CharSequence getInfo() {
+		if (mInfo != null) {
+			return mInfo;
+		}
 		switch (type) {
 		case Message.TYPE_FACEBOOK_HOME:
-			StringBuilder infoSB = sSB;
-			infoSB.setLength(0);
+			StringBuilder infoSB = new StringBuilder();
 			int commentCount = comments != null ? comments.getRealCount() : 0;
 			if (numLikes > 0) {
 				infoSB.append(numLikes);
@@ -251,7 +259,7 @@ public final class Message implements Comparable<Message> {
 				infoSB.append(commentCount);
 				infoSB.append(commentCount == 1 ? " comment" : " comments");
 			}
-			return infoSB.toString();
+			return mInfo = infoSB;
 		default:
 			return null;
 		}
@@ -291,10 +299,10 @@ public final class Message implements Comparable<Message> {
 		return mSpannable;
 	}
 	
-	public String getTime() {
-		sSB.setLength(0);
-		TimeUtils.parseDuration(sSB, System.currentTimeMillis() - createdTime, false);
-		return sSB.toString();
+	public CharSequence getTime() {
+		mTime.setLength(0);
+		TimeUtils.parseDuration(mTime, System.currentTimeMillis() - createdTime, false);
+		return mTime;
 	}
 	
 	public boolean isChat() {

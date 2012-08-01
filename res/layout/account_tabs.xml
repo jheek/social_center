@@ -3,10 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android" 
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
-    android:orientation="vertical"
-         android:background="#333333">
+    android:orientation="horizontal"
+    android:background="#333333">
     
-    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal">
 		<HorizontalScrollView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1">
 		    <LinearLayout 
 		        android:layout_width="wrap_content"
@@ -24,8 +23,6 @@
 			android:paddingRight="10dp"
 			android:textSize="16sp"
 			android:textStyle="bold"/>
-		
-	</LinearLayout>
 
 	
 </LinearLayout>

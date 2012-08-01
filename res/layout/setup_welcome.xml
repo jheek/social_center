@@ -1,28 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-
 <TextView
-    android:layout_width="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
+    android:gravity="center_horizontal"
     android:text="@string/setup_welcome"
-    android:layout_marginTop="40dp"
+    android:paddingTop="40dp"
     android:textColor="#CCCCCC"
     android:textSize="18sp"
+    android:drawablePadding="50dp"
+    android:drawableBottom="@drawable/welcome_logo2"
      >   
 </TextView>
-
-<ImageView 
-    android:background="@drawable/welcome_logo2"
-android:layout_gravity="center"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    
-     android:layout_marginTop="50dp"
-    />
-
- </LinearLayout>
