@@ -145,11 +145,13 @@ public class ColumnView extends RelativeLayout implements ColumnProviderListener
 	
 	@Override
 	public void onScroll(AbsListView pView, int pFirstVisibleItem, int pVisibleItemCount, int pTotalItemCount) {
-		updateLastReadMessage();
 	}
 	
 	@Override
 	public void onScrollStateChanged(AbsListView pView, int pScrollState) {
+		if (pScrollState == SCROLL_STATE_IDLE) {
+			updateLastReadMessage();
+		}
 	}
 	
 	private void updateLastReadMessage() {
