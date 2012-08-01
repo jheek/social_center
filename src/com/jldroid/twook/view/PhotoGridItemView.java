@@ -34,7 +34,7 @@ public class PhotoGridItemView extends ImageView implements LoadBitmapCallback {
 			setImageBitmap(mBmd);
 		} else {
 			setImageDrawable(null);
-			im.loadImage(this, uri, DeletionTrigger.IMMEDIATELY, ImageManager.REF_SOFT, (int) (getResources().getDisplayMetrics().density * 100), -1, -1);
+			im.loadImage(this, uri, DeletionTrigger.IMMEDIATELY, (int) (getResources().getDisplayMetrics().density * 100), -1, -1);
 		}
 	}
 	

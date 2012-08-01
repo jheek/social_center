@@ -44,7 +44,7 @@ public class ViewImageFragment extends SherlockFragment implements LoadBitmapCal
 	public void onActivityCreated(Bundle pSavedInstanceState) {
 		super.onActivityCreated(pSavedInstanceState);
 		ImageManager im = ImageManager.getInstance(getActivity());
-		im.loadImage(this, mUrl, DeletionTrigger.IMMEDIATELY, ImageManager.REF_SOFT, -1, -1, 100);
+		im.loadImage(this, mUrl, DeletionTrigger.IMMEDIATELY, -1, -1, 100);
 	}
 	
 	@Override

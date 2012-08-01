@@ -1,24 +1,21 @@
 package com.jldroid.twook.model;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
-import java.lang.ref.WeakReference;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -27,6 +24,8 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
+import android.os.Build.VERSION;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.jdroid.utils.FastBufferedInputStream;
@@ -38,9 +37,6 @@ public class ImageManager {
 	
 	private static final long FLUSH_DELAY = 10000;
 	
-	public static final int REF_WEAK = 1;
-	public static final int REF_SOFT = 2;
-	
 	private static ImageManager sInstance;
 	
 	protected Context mContext;
@@ -50,6 +46,8 @@ public class ImageManager {
 	protected File mCacheDir;
 	
 	private HashMap<String, CachedImage> mCachedImages;
+	
+	protected final LruCache<String, Bitmap> mBitmapCache;
 	
 	private int mFilenameCounter;
 	
@@ -71,6 +69,11 @@ public class ImageManager {
 	
 	private ImageManager(Context c) {
 		mContext = c;
+		this.mBitmapCache = new LruCache<String, Bitmap>((int) (4 * 1024 * 1024)) {
+			protected int sizeOf(String key, Bitmap value) {
+				return value.getWidth() * value.getHeight() * 4;
+			};
+		};
 		mCacheDir = mContext.getDir("cache", Context.MODE_PRIVATE);
 		mProfilePictureSize = (int) (mContext.getResources().getDisplayMetrics().density * 48);
 		
@@ -132,17 +135,16 @@ public class ImageManager {
 	}
 	
 	public void loadProfilePicture(LoadBitmapCallback callback, String uri, DeletionTrigger deletionTrigger) {
-		loadImage(callback, uri, deletionTrigger, REF_SOFT, mProfilePictureSize, mProfilePictureSize, 80);
+		loadImage(callback, uri, deletionTrigger, mProfilePictureSize, mProfilePictureSize, 80);
 	}
 	
-	public void loadImage(LoadBitmapCallback callback, String uri, DeletionTrigger deletionTrigger, int refType,
-			int outWidth, int outHeight, int quality) {
+	public void loadImage(LoadBitmapCallback callback, String uri, DeletionTrigger deletionTrigger, int outWidth, int outHeight, int quality) {
 		if (uri == null) {
 			throw new IllegalStateException("uri cannot be null");
 		}
 		CachedImage cachedImage = peekCachedImage(uri);
 		if (cachedImage == null) {
-			cachedImage = new CachedImage(uri, deletionTrigger, refType);
+			cachedImage = new CachedImage(uri, deletionTrigger);
 			mCachedImages.put(uri, cachedImage);
 			updateStorage();
 		} else {
@@ -250,13 +252,15 @@ public class ImageManager {
 		public void onFailed(String uri);
 	}
 	
+	
+	private static HttpClient sHttpClient = new DefaultHttpClient();
+	
 	public class CachedImage {
 		
 		private String mUri;
 		private String mFilename;
 		
 		private Object mRef;
-		private int mRefType;
 		private DeletionTrigger mDeletionTrigger;
 		
 		private StorageBundle mBundle;
@@ -277,44 +281,24 @@ public class ImageManager {
 			mBundle = bundle;
 			mUri = bundle.readString("URI", null);
 			mDeletionTrigger = values[bundle.readInt("DELETIONTRIGGER", 0)];
-			mRefType = bundle.readInt("REFTYPE", REF_SOFT);
 			mFilename = bundle.readString("FILENAME", null);
 			mLoadTime = bundle.readLong("LOADTIME", -1);
 			mLastUsedTime = bundle.readLong("LASTUSEDTIME", -1);
 		}
 		
-		public CachedImage(String uri, DeletionTrigger trigger, int refType) {
+		public CachedImage(String uri, DeletionTrigger trigger) {
 			this();
-			setRefType(refType);
 			setDeletionTrigger(trigger);
 			setUri(uri);
 		}
 		
 		public synchronized Bitmap peekBmd() {
-			if (mRef == null) {
-				return null;
-			}
 			setLastUsedTime(System.currentTimeMillis());
-			switch (mRefType) {
-			case REF_WEAK:
-				return ((WeakReference<Bitmap>) mRef).get();
-			case REF_SOFT:
-				return ((SoftReference<Bitmap>) mRef).get();
-			default:
-				throw new IllegalStateException("UNKNOWN REF TYPE: " + mRefType);
-			}
+			return mBitmapCache.get(this.mUri);
 		}
 		
 		private synchronized void setBitmap(Bitmap bmd) {
-			switch (mRefType) {
-			case REF_WEAK:
-				mRef = new WeakReference<Bitmap>(bmd);
-				break;
-			case REF_SOFT:
-			default:
-				mRefType = REF_SOFT;
-				mRef = new SoftReference<Bitmap>(bmd);
-			}
+			mBitmapCache.put(mUri, bmd);
 			setLastUsedTime(System.currentTimeMillis());
 			for (int i = mCallbackQueue.size() - 1; i >= 0; i--) {
 				LoadBitmapCallback callback = mCallbackQueue.get(i);
@@ -389,7 +373,11 @@ public class ImageManager {
 									h = (int) (w / ratio);
 								}
 								if (w != bmd.getWidth() || h != bmd.getHeight()) {
-									if (false && w / h == bmd.getWidth() / bmd.getHeight() && w > bmd.getWidth() && h > bmd.getHeight()) {
+									// when device uses software rendering scaling bitmaps at render time is costly
+									// on hardware acelerated rendering its free but memory isn't so don't do pre-scaling on when hardware accelerated.
+									// TODO better check for hardware accelerated rendering...
+									boolean isPreScale = w / h == bmd.getWidth() / bmd.getHeight() && w > bmd.getWidth() && h > bmd.getHeight();
+									if (!isPreScale || VERSION.SDK_INT > 11) {
 										// scaling is wasted here...
 									} else {
 										Bitmap scaledBmd = Bitmap.createScaledBitmap(bmd, w, h, true);
@@ -446,8 +434,9 @@ public class ImageManager {
 		}
 		
 		private Bitmap downloadBitmap() {
-			InputStream is = null;
 			FastBufferedInputStream fbis = sBufStreamPool.get();
+			/*
+			InputStream is = null;
 			URLConnection conn = null;
 			try {
 				conn = new URL(mUri).openConnection();
@@ -466,8 +455,26 @@ public class ImageManager {
 					}
 					is = null;
 				}
+			} */
+			HttpEntity entity = null;
+			try {
+				HttpClient httpclient = sHttpClient;
+			    HttpResponse response = httpclient.execute(new HttpGet(this.mUri));
+			    entity = response.getEntity();
+				fbis.setInputStream(entity.getContent());
+				return BitmapFactory.decodeStream(fbis, null, sNetworkDecodingOptions);
+			} catch (IOException e) {
+				Log.w("ImageDownloader", "Error while retrieving bitmap from " + mUri);
+			} finally {
+				try {
+					fbis.close();
+					if (entity != null) {
+						entity.consumeContent();
+					}
+				} catch (IOException e) {
+				}
 			}
-		    return null;
+			return null;
 		}
 		
 		private Bitmap loadBitmapFromStorage() {
@@ -507,15 +514,6 @@ public class ImageManager {
 		private void setUri(String pUri) {
 			mUri = pUri;
 			mBundle.write("URI", pUri);
-		}
-		
-		public int getRefType() {
-			return mRefType;
-		}
-		
-		public void setRefType(int pRefType) {
-			mRefType = pRefType;
-			mBundle.write("REFTYPE", pRefType);
 		}
 		
 		public DeletionTrigger getDeletionTrigger() {
@@ -559,12 +557,8 @@ public class ImageManager {
 		}
 		
 		public synchronized void releaseBmd() {
-			Object obj = mRef;
 			mRef = null;
-			if (obj instanceof Reference<?>) {
-				Reference<Bitmap> ref = (Reference<Bitmap>) obj;
-				ref.clear();
-			}
+			mBitmapCache.remove(this.mUri);
 		}
 		
 		public StorageBundle getBundle() {

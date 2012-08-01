@@ -536,7 +536,7 @@ public class DetailsFragment extends SherlockFragment {
 										}
 									});
 								}
-							}, img.bigSrc, DeletionTrigger.IMMEDIATELY, ImageManager.REF_WEAK, -1, -1, 50);
+							}, img.bigSrc, DeletionTrigger.IMMEDIATELY, -1, -1, 50);
 						}
 					} else {
 						Threads.runOnUIThread(new Runnable() {

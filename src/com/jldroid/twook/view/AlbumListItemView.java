@@ -50,7 +50,7 @@ public class AlbumListItemView extends RelativeLayout implements LoadBitmapCallb
 			mPreviewIV.setImageBitmap(bmd);
 		} else {
 			mPreviewIV.setImageResource(R.drawable.album_image);
-			im.loadImage(this, uri, DeletionTrigger.AFTER_ONE_DAY_UNUSED, ImageManager.REF_WEAK, -1, -1, 50);
+			im.loadImage(this, uri, DeletionTrigger.AFTER_ONE_DAY_UNUSED, -1, -1, 50);
 		}
 	}
 	

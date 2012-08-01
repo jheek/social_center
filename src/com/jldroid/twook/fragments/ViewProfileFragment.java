@@ -143,7 +143,7 @@ public class ViewProfileFragment extends SherlockFragment implements OnPageChang
 					}
 				});
 			}
-		}, mUser.largeProfilePictureUrl != null ? mUser.largeProfilePictureUrl : mUser.profilePictureUrl, DeletionTrigger.IMMEDIATELY, ImageManager.REF_SOFT, (int) (getResources().getDisplayMetrics().density * 100), -1, 80);
+		}, mUser.largeProfilePictureUrl != null ? mUser.largeProfilePictureUrl : mUser.profilePictureUrl, DeletionTrigger.IMMEDIATELY, (int) (getResources().getDisplayMetrics().density * 100), -1, 80);
 		
 		mInfoNameTV.setText(mUser.name);
 		
